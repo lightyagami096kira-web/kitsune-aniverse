@@ -36,8 +36,7 @@ nav{padding:20px 5vw;border-bottom:1px solid rgba(255,255,255,0.1);position:stic
 .empty-icon{font-size:48px;margin-bottom:20px;}
 .loading{text-align:center;padding:40px;color:var(--text-dim);}
 .spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.pin-form{max-width:400px;margin:80px auto;background:var(--panel);padding:40px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);text-align:center;}
+@keyframes spin{to{transform:rotate(360deg);}}.pin-form{max-width:400px;margin:80px auto;background:var(--panel);padding:40px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);text-align:center;}
 .pin-form h2{font-family:'Shippori Mincho B1',serif;font-size:24px;margin-bottom:20px;}
 .pin-form p{color:var(--text-dim);margin-bottom:25px;font-size:14px;}
 .pin-form input{width:100%;padding:12px;background:#0a0710;border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:var(--text);font-size:14px;margin-bottom:15px;}
@@ -93,17 +92,22 @@ try {
     db, auth,
 
     async boot(){
+      await this.loadSeries();
+      this.render();
+    },
+
+    async loadSeries(){
       try {
         const snap = await getDocs(collection(db, 'series'));
         this.series = snap.docs.map(d => ({...d.data(), id: d.id})).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
       } catch(e) { console.error('Load failed:', e); }
-      this.render();
     },
 
-    showView(v){
+    async showView(v){
       this.view = v;
       document.getElementById('tab-home').classList.toggle('active', v === 'home');
       document.getElementById('tab-upload').classList.toggle('active', v === 'upload');
+      if(v === 'upload') await this.loadSeries();
       this.render();
     },
 
@@ -274,7 +278,9 @@ try {
         alert('Series created!');
         document.getElementById('f-title').value = '';
         document.getElementById('f-desc').value = '';
-        this.boot();
+        document.getElementById('f-cover').value = '';
+        await this.loadSeries();
+        this.render();
       } catch(e) { alert('Error: ' + e.message); }
       btn.disabled = false;
       btn.textContent = 'Save Series';
@@ -305,7 +311,12 @@ try {
           });
         }
         alert('Chapter saved!');
-        this.boot();
+        document.getElementById('f-series').value = '';
+        document.getElementById('f-num').value = '1';
+        document.getElementById('f-ch-title').value = '';
+        document.getElementById('f-pages').value = '';
+        await this.loadSeries();
+        this.render();
       } catch(e) { alert('Error: ' + e.message); }
       btn.disabled = false;
       btn.textContent = 'Save Chapter';
