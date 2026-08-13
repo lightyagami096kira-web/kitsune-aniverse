@@ -124,7 +124,11 @@ label{
 
     <div id="socialLinks" class="social"></div>
 
-    <button onclick="googleLogin()">Connect Google Account</button>
+    <button id="homeLoginBtn" onclick="googleLogin()">
+      Connect Google Account
+    </button>
+
+    <p id="homeUserInfo" class="small"></p>
   </div>
 
   <div id="posts"></div>
@@ -137,10 +141,15 @@ label{
 
     <h2>Creator Panel</h2>
 
-    <p id="userInfo" class="small"></p>
+    <p id="userInfo" class="small">Not connected.</p>
 
-    <button onclick="googleLogin()">Connect / Login with Google</button>
-    <button onclick="logout()">Logout</button>
+    <button id="creatorLoginBtn" onclick="googleLogin()">
+      Connect / Login with Google
+    </button>
+
+    <button onclick="logout()">
+      Logout
+    </button>
 
   </div>
 
@@ -166,7 +175,9 @@ label{
       <label>Website Logo</label>
       <input type="file" id="logoFile" accept="image/*">
 
-      <button onclick="saveSettings()">Save Website Settings</button>
+      <button onclick="saveSettings()">
+        Save Website Settings
+      </button>
 
       <p id="settingsStatus"></p>
 
@@ -181,12 +192,21 @@ label{
       <input id="postTitle" placeholder="Post title">
 
       <label>Description</label>
-      <textarea id="postDescription" placeholder="Write something..."></textarea>
+      <textarea
+        id="postDescription"
+        placeholder="Write something..."
+      ></textarea>
 
       <label>Upload Image / Video</label>
-      <input type="file" id="postFile" accept="image/*,video/*">
+      <input
+        type="file"
+        id="postFile"
+        accept="image/*,video/*"
+      >
 
-      <button onclick="uploadPost()">Publish Post</button>
+      <button onclick="uploadPost()">
+        Publish Post
+      </button>
 
       <p id="uploadStatus"></p>
 
@@ -281,7 +301,7 @@ const provider = new GoogleAuthProvider();
    ADMIN EMAIL
 ========================= */
 
-const ADMIN_EMAIL = "admin@kitsuneaniverse.com";
+const ADMIN_EMAIL = "lightyagami096kira@gmail.com";
 
 
 /* =========================
@@ -343,13 +363,16 @@ window.logout = async function(){
    AUTH STATE
 ========================= */
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(
+  auth,
+  (user)=>{
 
-  currentUser = user;
+    currentUser = user;
 
-  updateUserUI();
+    updateUserUI();
 
-});
+  }
+);
 
 
 /* =========================
@@ -364,30 +387,90 @@ function updateUserUI(){
   const admin =
     document.getElementById("adminPanel");
 
+  const homeLoginBtn =
+    document.getElementById("homeLoginBtn");
+
+  const creatorLoginBtn =
+    document.getElementById("creatorLoginBtn");
+
+  const homeUserInfo =
+    document.getElementById("homeUserInfo");
+
+
   if(!currentUser){
 
-    info.innerHTML =
-      "Not connected.";
+    if(info){
+      info.innerHTML =
+        "Not connected.";
+    }
 
-    admin.classList.add("hidden");
+    if(admin){
+      admin.classList.add("hidden");
+    }
+
+    if(homeLoginBtn){
+      homeLoginBtn.style.display =
+        "inline-block";
+    }
+
+    if(creatorLoginBtn){
+      creatorLoginBtn.style.display =
+        "inline-block";
+    }
+
+    if(homeUserInfo){
+      homeUserInfo.innerHTML = "";
+    }
 
     return;
 
   }
 
 
-  info.innerHTML =
-    "Connected as: <b>" +
-    currentUser.email +
-    "</b>";
+  const email =
+    currentUser.email || "";
+
+
+  if(info){
+
+    info.innerHTML =
+      "Connected as: <b>" +
+      email +
+      "</b>";
+
+  }
+
+
+  if(homeLoginBtn){
+    homeLoginBtn.style.display =
+      "none";
+  }
+
+
+  if(creatorLoginBtn){
+    creatorLoginBtn.style.display =
+      "none";
+  }
+
+
+  if(homeUserInfo){
+
+    homeUserInfo.innerHTML =
+      "Connected as: <b>" +
+      email +
+      "</b>";
+
+  }
 
 
   if(
-    currentUser.email.toLowerCase()
+    email.toLowerCase()
     === ADMIN_EMAIL.toLowerCase()
   ){
 
-    admin.classList.remove("hidden");
+    admin.classList.remove(
+      "hidden"
+    );
 
     loadSettings();
 
@@ -395,7 +478,9 @@ function updateUserUI(){
 
   }else{
 
-    admin.classList.add("hidden");
+    admin.classList.add(
+      "hidden"
+    );
 
   }
 
@@ -408,10 +493,12 @@ function updateUserUI(){
 
 window.showHome = function(){
 
-  document.getElementById("home")
+  document
+    .getElementById("home")
     .classList.remove("hidden");
 
-  document.getElementById("creator")
+  document
+    .getElementById("creator")
     .classList.add("hidden");
 
   loadPosts();
@@ -421,10 +508,12 @@ window.showHome = function(){
 
 window.showCreator = function(){
 
-  document.getElementById("home")
+  document
+    .getElementById("home")
     .classList.add("hidden");
 
-  document.getElementById("creator")
+  document
+    .getElementById("creator")
     .classList.remove("hidden");
 
   updateUserUI();
@@ -442,24 +531,46 @@ async function loadSettings(){
 
     const snap =
       await getDoc(
-        doc(db,"settings","website")
+        doc(
+          db,
+          "settings",
+          "website"
+        )
       );
 
-    if(!snap.exists()) return;
 
-    const data = snap.data();
+    if(!snap.exists())
+      return;
 
-    document.getElementById("siteName").value =
-      data.siteName || "Kitsune AniVerse";
 
-    document.getElementById("facebook").value =
+    const data =
+      snap.data();
+
+
+    document.getElementById(
+      "siteName"
+    ).value =
+      data.siteName ||
+      "Kitsune AniVerse";
+
+
+    document.getElementById(
+      "facebook"
+    ).value =
       data.facebook || "";
 
-    document.getElementById("instagram").value =
+
+    document.getElementById(
+      "instagram"
+    ).value =
       data.instagram || "";
 
-    document.getElementById("youtube").value =
+
+    document.getElementById(
+      "youtube"
+    ).value =
       data.youtube || "";
+
 
     updateSocialLinks(data);
 
@@ -476,7 +587,8 @@ async function loadSettings(){
    SAVE SETTINGS
 ========================= */
 
-window.saveSettings = async function(){
+window.saveSettings =
+async function(){
 
   if(!isAdmin()){
 
@@ -488,31 +600,57 @@ window.saveSettings = async function(){
 
 
   const siteName =
-    document.getElementById("siteName").value;
+    document
+      .getElementById(
+        "siteName"
+      )
+      .value;
+
 
   const facebook =
-    document.getElementById("facebook").value;
+    document
+      .getElementById(
+        "facebook"
+      )
+      .value;
+
 
   const instagram =
-    document.getElementById("instagram").value;
+    document
+      .getElementById(
+        "instagram"
+      )
+      .value;
+
 
   const youtube =
-    document.getElementById("youtube").value;
+    document
+      .getElementById(
+        "youtube"
+      )
+      .value;
 
 
   await setDoc(
 
-    doc(db,"settings","website"),
+    doc(
+      db,
+      "settings",
+      "website"
+    ),
 
     {
       siteName,
       facebook,
       instagram,
       youtube,
-      updatedAt:Date.now()
+      updatedAt:
+        Date.now()
     },
 
-    {merge:true}
+    {
+      merge:true
+    }
 
   );
 
@@ -520,13 +658,17 @@ window.saveSettings = async function(){
   document.getElementById(
     "settingsStatus"
   ).innerHTML =
-    '<span class="success">Settings saved successfully.</span>';
+    '<span class="success">' +
+    'Settings saved successfully.' +
+    '</span>';
 
 
   updateSocialLinks({
+
     facebook,
     instagram,
     youtube
+
   });
 
 };
@@ -539,33 +681,48 @@ window.saveSettings = async function(){
 function updateSocialLinks(data){
 
   const box =
-    document.getElementById("socialLinks");
+    document.getElementById(
+      "socialLinks"
+    );
 
   let html = "";
+
 
   if(data.facebook){
 
     html +=
-      `<a href="${escapeAttr(data.facebook)}"
-      target="_blank">Facebook</a>`;
+      `<a
+        href="${escapeAttr(data.facebook)}"
+        target="_blank">
+        Facebook
+      </a>`;
 
   }
+
 
   if(data.instagram){
 
     html +=
-      `<a href="${escapeAttr(data.instagram)}"
-      target="_blank">Instagram</a>`;
+      `<a
+        href="${escapeAttr(data.instagram)}"
+        target="_blank">
+        Instagram
+      </a>`;
 
   }
+
 
   if(data.youtube){
 
     html +=
-      `<a href="${escapeAttr(data.youtube)}"
-      target="_blank">YouTube</a>`;
+      `<a
+        href="${escapeAttr(data.youtube)}"
+        target="_blank">
+        YouTube
+      </a>`;
 
   }
+
 
   box.innerHTML = html;
 
@@ -579,6 +736,7 @@ function updateSocialLinks(data){
 function isAdmin(){
 
   return currentUser &&
+    currentUser.email &&
     currentUser.email.toLowerCase()
     === ADMIN_EMAIL.toLowerCase();
 
@@ -589,11 +747,14 @@ function isAdmin(){
    UPLOAD POST
 ========================= */
 
-window.uploadPost = async function(){
+window.uploadPost =
+async function(){
 
   if(!isAdmin()){
 
-    alert("Only the admin can publish posts.");
+    alert(
+      "Only the admin can publish posts."
+    );
 
     return;
 
@@ -601,18 +762,36 @@ window.uploadPost = async function(){
 
 
   const title =
-    document.getElementById("postTitle").value.trim();
+    document
+      .getElementById(
+        "postTitle"
+      )
+      .value
+      .trim();
+
 
   const description =
-    document.getElementById("postDescription").value.trim();
+    document
+      .getElementById(
+        "postDescription"
+      )
+      .value
+      .trim();
+
 
   const file =
-    document.getElementById("postFile").files[0];
+    document
+      .getElementById(
+        "postFile"
+      )
+      .files[0];
 
 
   if(!title){
 
-    alert("Enter a post title.");
+    alert(
+      "Enter a post title."
+    );
 
     return;
 
@@ -621,7 +800,9 @@ window.uploadPost = async function(){
 
   if(!file){
 
-    alert("Choose an image or video.");
+    alert(
+      "Choose an image or video."
+    );
 
     return;
 
@@ -629,7 +810,9 @@ window.uploadPost = async function(){
 
 
   const status =
-    document.getElementById("uploadStatus");
+    document.getElementById(
+      "uploadStatus"
+    );
 
 
   status.innerText =
@@ -637,11 +820,6 @@ window.uploadPost = async function(){
 
 
   try{
-
-    /*
-      Firebase Storage supports large files.
-      This uses resumable upload.
-    */
 
     const safeName =
       file.name.replace(
@@ -675,11 +853,14 @@ window.uploadPost = async function(){
 
         const progress =
           Math.round(
+
             (
               snapshot.bytesTransferred /
               snapshot.totalBytes
             ) * 100
+
           );
+
 
         status.innerText =
           "Uploading... " +
@@ -687,6 +868,7 @@ window.uploadPost = async function(){
           "%";
 
       },
+
 
       (error)=>{
 
@@ -697,6 +879,7 @@ window.uploadPost = async function(){
           error.message;
 
       },
+
 
       async ()=>{
 
@@ -714,23 +897,39 @@ window.uploadPost = async function(){
 
         await addDoc(
 
-          collection(db,"posts"),
+          collection(
+            db,
+            "posts"
+          ),
 
           {
+
             title,
+
             description,
+
             url,
+
             type,
-            fileName:file.name,
-            createdAt:Date.now(),
-            createdBy:currentUser.email
+
+            fileName:
+              file.name,
+
+            createdAt:
+              Date.now(),
+
+            createdBy:
+              currentUser.email
+
           }
 
         );
 
 
         status.innerHTML =
-          '<span class="success">Post published successfully!</span>';
+          '<span class="success">' +
+          'Post published successfully!' +
+          '</span>';
 
 
         document.getElementById(
@@ -776,15 +975,26 @@ window.uploadPost = async function(){
 async function loadPosts(){
 
   const box =
-    document.getElementById("posts");
+    document.getElementById(
+      "posts"
+    );
 
 
   try{
 
     const q =
       query(
-        collection(db,"posts"),
-        orderBy("createdAt","desc")
+
+        collection(
+          db,
+          "posts"
+        ),
+
+        orderBy(
+          "createdAt",
+          "desc"
+        )
+
       );
 
 
@@ -795,7 +1005,12 @@ async function loadPosts(){
     if(snapshot.empty){
 
       box.innerHTML =
-        '<div class="card"><h2>No posts yet</h2><p class="small">New manga, art and videos will appear here.</p></div>';
+        '<div class="card">' +
+        '<h2>No posts yet</h2>' +
+        '<p class="small">' +
+        'New manga, art and videos will appear here.' +
+        '</p>' +
+        '</div>';
 
       return;
 
@@ -805,54 +1020,74 @@ async function loadPosts(){
     let html = "";
 
 
-    snapshot.forEach((item)=>{
+    snapshot.forEach(
+      (item)=>{
 
-      const p = item.data();
-
-
-      html += `
-
-        <article class="post">
-
-          <h2>${escapeHtml(p.title)}</h2>
-
-          <p>${escapeHtml(
-            p.description || ""
-          )}</p>
-
-          ${
-            p.type === "video"
-
-            ?
-
-            `<video
-              controls
-              preload="metadata"
-              src="${escapeAttr(p.url)}">
-            </video>`
-
-            :
-
-            `<img
-              loading="lazy"
-              src="${escapeAttr(p.url)}"
-              alt="${escapeAttr(p.title)}">`
-          }
-
-          <div class="small">
-            Published by ${escapeHtml(
-              p.createdBy || "Kitsune AniVerse"
-            )}
-          </div>
-
-        </article>
-
-      `;
-
-    });
+        const p =
+          item.data();
 
 
-    box.innerHTML = html;
+        html += `
+
+          <article class="post">
+
+            <h2>
+              ${escapeHtml(
+                p.title
+              )}
+            </h2>
+
+            <p>
+              ${escapeHtml(
+                p.description || ""
+              )}
+            </p>
+
+            ${
+              p.type === "video"
+
+              ?
+
+              `<video
+                controls
+                preload="metadata"
+                src="${escapeAttr(
+                  p.url
+                )}">
+              </video>`
+
+              :
+
+              `<img
+                loading="lazy"
+                src="${escapeAttr(
+                  p.url
+                )}"
+                alt="${escapeAttr(
+                  p.title
+                )}">`
+            }
+
+            <div class="small">
+
+              Published by
+              ${escapeHtml(
+                p.createdBy ||
+                "Kitsune AniVerse"
+              )}
+
+            </div>
+
+          </article>
+
+        `;
+
+      }
+    );
+
+
+    box.innerHTML =
+      html;
 
 
   }catch(error){
@@ -875,19 +1110,33 @@ async function loadPosts(){
 
 async function loadAdminPosts(){
 
-  if(!isAdmin()) return;
+  if(!isAdmin())
+    return;
 
 
   const box =
-    document.getElementById("adminPosts");
+    document.getElementById(
+      "adminPosts"
+    );
 
 
   const snapshot =
     await getDocs(
+
       query(
-        collection(db,"posts"),
-        orderBy("createdAt","desc")
+
+        collection(
+          db,
+          "posts"
+        ),
+
+        orderBy(
+          "createdAt",
+          "desc"
+        )
+
       )
+
     );
 
 
@@ -904,39 +1153,54 @@ async function loadAdminPosts(){
   let html = "";
 
 
-  snapshot.forEach((item)=>{
+  snapshot.forEach(
+    (item)=>{
 
-    const p = item.data();
+      const p =
+        item.data();
 
 
-    html += `
+      html += `
 
-      <div class="post">
+        <div class="post">
 
-        <b>${escapeHtml(p.title)}</b>
+          <b>
+            ${escapeHtml(
+              p.title
+            )}
+          </b>
 
-        <div class="small">
-          ${escapeHtml(p.fileName || "")}
+          <div class="small">
+            ${escapeHtml(
+              p.fileName || ""
+            )}
+          </div>
+
+          <br>
+
+          <button
+            class="danger"
+            onclick="deletePost(
+              '${item.id}',
+              '${escapeAttr(
+                p.url
+              )}'
+            )">
+
+            Delete
+
+          </button>
+
         </div>
 
-        <br>
+      `;
 
-        <button
-          class="danger"
-          onclick="deletePost('${item.id}','${escapeAttr(p.url)}')">
-
-          Delete
-
-        </button>
-
-      </div>
-
-    `;
-
-  });
+    }
+  );
 
 
-  box.innerHTML = html;
+  box.innerHTML =
+    html;
 
 }
 
@@ -945,14 +1209,17 @@ async function loadAdminPosts(){
    DELETE POST
 ========================= */
 
-window.deletePost = async function(
+window.deletePost =
+async function(
   id,
   url
 ){
 
   if(!isAdmin()){
 
-    alert("Admin only.");
+    alert(
+      "Admin only."
+    );
 
     return;
 
@@ -963,22 +1230,33 @@ window.deletePost = async function(
     !confirm(
       "Delete this post permanently?"
     )
-  ) return;
+  )
+    return;
 
 
   try{
 
     await deleteDoc(
-      doc(db,"posts",id)
+      doc(
+        db,
+        "posts",
+        id
+      )
     );
 
 
     try{
 
       const fileRef =
-        ref(storage,url);
+        ref(
+          storage,
+          url
+        );
 
-      await deleteObject(fileRef);
+
+      await deleteObject(
+        fileRef
+      );
 
     }catch(e){
 
@@ -1013,32 +1291,52 @@ window.deletePost = async function(
 
 function escapeHtml(value){
 
-  return String(value || "")
-    .replace(
-      /[&<>"']/g,
-      function(m){
+  return String(
+    value || ""
+  )
 
-        return {
-          "&":"&amp;",
-          "<":"&lt;",
-          ">":"&gt;",
-          '"':"&quot;",
-          "'":"&#039;"
+  .replace(
+    /[&<>"']/g,
 
-        }[m];
+    function(m){
 
-      }
-    );
+      return {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      }[m];
+
+    }
+
+  );
 
 }
 
 
 function escapeAttr(value){
 
-  return String(value || "")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
+  return String(
+    value || ""
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  );
 
 }
 
