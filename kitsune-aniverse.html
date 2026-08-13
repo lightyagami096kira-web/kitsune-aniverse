@@ -1,217 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kitsune AniVerse</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap');
+  :root{
+    --bg-void:#0a0611;
+    --bg-void-2:#120a1c;
+    --bg-panel:#17101f;
+    --bg-panel-2:#1e1428;
+    --line:#33223f;
+    --purple-fire:#a15ef0;
+    --purple-deep:#6a2fb5;
+    --purple-glow:rgba(161,94,240,.45);
+    --crimson:#c81d4a;
+    --crimson-deep:#7a0f2e;
+    --gold:#e8b64c;
+    --text-main:#f3ebf7;
+    --text-muted:#a898b8;
+    --text-faint:#6c5c7c;
+    --font-display:'Cinzel Decorative', serif;
+    --font-body:'Zen Kaku Gothic New', sans-serif;
+    --font-mono:'Space Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -10%, rgba(106,47,181,.35), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 100%, rgba(200,29,74,.18), transparent 60%),
+      var(--bg-void);
+    color:var(--text-main);
+    font-family:var(--font-body);
+    min-height:100vh;
+    line-height:1.5;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--purple-fire);color:#0a0611;}
 
-:root{
-  --void:#0a0710;
-  --panel:#140e1f;
-  --panel-2:#1d1430;
-  --panel-3:#251a3a;
-  --crimson:#d21f3c;
-  --crimson-glow:#ff3b5c;
-  --violet:#8b2fd6;
-  --violet-glow:#b565ff;
-  --ember:#ff7a45;
-  --text:#f3ecfa;
-  --text-dim:#a294bd;
-  --text-faint:#6d5f8a;
-  --line:rgba(240,233,247,0.09);
-  --line-bright:rgba(240,233,247,0.18);
-}
-*{box-sizing:border-box; margin:0; padding:0;}
-html,body{background:var(--void); color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif; overflow-x:hidden;}
-#root{min-height:100vh; position:relative;}
+  /* ---------- layout shells ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  #app{min-height:100vh;display:flex;flex-direction:column;}
+  .site-footer{margin-top:auto;}
 
-/* ambient background */
-.bg-glow{position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(139,47,214,0.25), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(210,31,60,0.18), transparent 60%),
-    radial-gradient(ellipse 600px 400px at 50% 100%, rgba(255,122,69,0.08), transparent 60%);
-}
-.grain{position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.035;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+  /* ---------- header ---------- */
+  header.topbar{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:blur(10px);
+    background:rgba(10,6,17,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{width:38px;height:38px;filter:drop-shadow(0 0 6px var(--purple-glow));flex:none;}
+  .brand-text{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.5px;
+    background:linear-gradient(90deg,var(--gold),var(--purple-fire));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .brand-sub{font-family:var(--font-mono);font-size:9px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;margin-top:-2px;}
+  nav.mainnav{display:flex;gap:6px;align-items:center;}
+  .navlink{padding:9px 16px;font-size:13px;letter-spacing:.5px;color:var(--text-muted);border-radius:3px;transition:.2s;border:1px solid transparent;}
+  .navlink:hover{color:var(--text-main);background:rgba(161,94,240,.1);}
+  .navlink.active{color:var(--gold);border-color:var(--line);background:rgba(161,94,240,.08);}
+  .fb-pill{display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--purple-deep);border-radius:999px;font-size:12px;color:var(--text-muted);transition:.2s;}
+  .fb-pill:hover{border-color:var(--purple-fire);color:var(--text-main);box-shadow:0 0 14px var(--purple-glow);}
 
-h1,h2,h3,.display{font-family:'Shippori Mincho B1',serif;}
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding:92px 28px 76px;text-align:center;border-bottom:1px solid var(--line);}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none;}
+  .hero-inner{position:relative;z-index:2;}
+  .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:6px;color:var(--gold);text-transform:uppercase;opacity:.85;}
+  .eyebrow-jp{display:block;font-family:var(--font-body);font-size:15px;letter-spacing:8px;color:var(--text-faint);margin-bottom:10px;}
+  h1.hero-title{
+    font-family:var(--font-display);font-weight:900;
+    font-size:clamp(40px,7vw,84px);line-height:1.02;margin:10px 0 18px;
+    background:linear-gradient(180deg,#fff 10%,var(--purple-fire) 60%,var(--crimson) 120%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 60px var(--purple-glow);
+    letter-spacing:1px;
+  }
+  .hero-tag{color:var(--text-muted);font-size:16px;max-width:520px;margin:0 auto 34px;}
+  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn{padding:13px 26px;border-radius:3px;font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:500;border:1px solid transparent;transition:.2s;display:inline-flex;align-items:center;gap:8px;}
+  .btn-primary{background:linear-gradient(135deg,var(--purple-fire),var(--crimson-deep));color:#fff;box-shadow:0 4px 24px rgba(161,94,240,.35);}
+  .btn-primary:hover{filter:brightness(1.15);transform:translateY(-1px);}
+  .btn-ghost{border-color:var(--line);color:var(--text-muted);}
+  .btn-ghost:hover{border-color:var(--purple-fire);color:var(--text-main);}
 
-/* NAV */
-nav{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
-  padding:16px 5vw; background:rgba(10,7,16,0.72); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
-.brand{display:flex; align-items:center; gap:10px; cursor:pointer;}
-.brand-mark{width:34px; height:34px; flex-shrink:0;}
-.brand-name{font-family:'Shippori Mincho B1',serif; font-size:19px; font-weight:800; letter-spacing:0.5px;
-  background:linear-gradient(90deg,#fff, var(--violet-glow) 60%, var(--crimson-glow));
-  -webkit-background-clip:text; background-clip:text; color:transparent;}
-.brand-sub{font-size:9.5px; letter-spacing:3px; color:var(--text-faint); text-transform:uppercase; margin-top:1px;}
-.nav-tabs{display:flex; gap:6px; background:var(--panel); padding:4px; border-radius:100px; border:1px solid var(--line);}
-.nav-tab{padding:8px 18px; border-radius:100px; font-size:13.5px; font-weight:700; color:var(--text-dim);
-  cursor:pointer; transition:all .25s; border:none; background:transparent; font-family:inherit;}
-.nav-tab.active{background:linear-gradient(135deg,var(--crimson),var(--violet)); color:#fff; box-shadow:0 0 20px rgba(210,31,60,0.35);}
-.nav-tab:not(.active):hover{color:var(--text); background:var(--panel-2);}
+  /* ---------- torii divider ---------- */
+  .torii-divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 auto;padding:38px 0 10px;color:var(--text-faint);}
+  .torii-divider .line{height:1px;width:70px;background:linear-gradient(90deg,transparent,var(--line));}
+  .torii-divider .line.r{background:linear-gradient(90deg,var(--line),transparent);}
+  .torii-divider svg{width:22px;height:22px;opacity:.7;}
 
-/* HERO */
-.hero{position:relative; z-index:2; padding:70px 5vw 50px; display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;}
-.hero-text{flex:1; min-width:280px;}
-.eyebrow{font-size:11px; letter-spacing:4px; color:var(--ember); text-transform:uppercase; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:10px;}
-.eyebrow::before{content:''; width:24px; height:1px; background:var(--ember);}
-.hero h1{font-size:clamp(34px,5.5vw,64px); line-height:1.05; font-weight:800; margin-bottom:18px;}
-.hero h1 .accent{background:linear-gradient(120deg,var(--crimson-glow),var(--violet-glow)); -webkit-background-clip:text; background-clip:text; color:transparent;}
-.hero p{color:var(--text-dim); font-size:16px; max-width:480px; line-height:1.7; margin-bottom:28px;}
-.hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
-.btn{padding:13px 26px; border-radius:10px; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer; border:none; transition:all .2s; display:inline-flex; align-items:center; gap:8px;}
-.btn-primary{background:linear-gradient(135deg,var(--crimson),var(--violet)); color:#fff; box-shadow:0 8px 24px rgba(139,47,214,0.35);}
-.btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 28px rgba(139,47,214,0.5);}
-.btn-ghost{background:var(--panel-2); color:var(--text); border:1px solid var(--line-bright);}
-.btn-ghost:hover{background:var(--panel-3); border-color:var(--violet-glow);}
+  /* ---------- sections ---------- */
+  section.panel{padding:14px 28px 70px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:10px;}
+  .section-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--text-main);}
+  .section-title .accent{color:var(--gold);}
+  .section-count{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
 
-.kitsune-art{width:min(360px,38vw); flex-shrink:0; position:relative;}
-.ember-dot{position:absolute; border-radius:50%; filter:blur(1px); animation:float 6s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0) scale(1); opacity:.5;} 50%{transform:translateY(-22px) scale(1.3); opacity:1;}}
-@keyframes flicker{0%,100%{opacity:1;} 45%{opacity:.82;} 55%{opacity:.95;}}
-.tail{animation:flicker 3.4s ease-in-out infinite;}
-.tail:nth-child(2){animation-delay:.3s;}
-.tail:nth-child(3){animation-delay:.7s;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px;}
+  .card{
+    background:linear-gradient(160deg,var(--bg-panel),var(--bg-panel-2));
+    border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer;
+    transition:.25s;position:relative;
+  }
+  .card:hover{border-color:var(--purple-fire);transform:translateY(-4px);box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px var(--purple-glow);}
+  .card-cover{aspect-ratio:3/4;width:100%;object-fit:cover;display:block;background:linear-gradient(150deg,var(--purple-deep),var(--bg-void-2));}
+  .card-cover.placeholder{display:flex;align-items:center;justify-content:center;}
+  .card-cover.placeholder svg{width:44%;opacity:.25;}
+  .card-body{padding:14px 16px 16px;}
+  .card-title{font-family:var(--font-body);font-weight:700;font-size:15px;margin-bottom:6px;color:var(--text-main);}
+  .card-meta{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);letter-spacing:.5px;}
 
-/* SECTION LABELS */
-.section{position:relative; z-index:2; padding:20px 5vw 80px;}
-.section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;}
-.section-title{font-size:26px; font-weight:800;}
-.section-count{color:var(--text-faint); font-size:13px; font-weight:600;}
+  .empty-state{border:1px dashed var(--line);border-radius:8px;padding:64px 24px;text-align:center;color:var(--text-muted);}
+  .empty-state svg{width:64px;opacity:.35;margin-bottom:16px;}
+  .empty-state h3{font-family:var(--font-display);font-weight:700;color:var(--text-main);margin:0 0 8px;font-size:19px;}
+  .empty-state p{max-width:360px;margin:0 auto 20px;font-size:14px;}
 
-/* GRID / CARDS */
-.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:22px;}
-.card{background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden; cursor:pointer; transition:all .3s; position:relative;}
-.card:hover{transform:translateY(-6px); border-color:var(--violet-glow); box-shadow:0 16px 36px rgba(139,47,214,0.25);}
-.card-cover{width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--panel-2); display:block;}
-.card-cover-fallback{width:100%; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,var(--panel-2),var(--panel-3)); color:var(--text-faint); font-size:12px; text-align:center; padding:16px; font-weight:600;}
-.card-body{padding:14px 16px 16px;}
-.card-title{font-weight:800; font-size:15.5px; margin-bottom:5px; line-height:1.3;}
-.card-meta{font-size:11.5px; color:var(--text-faint); display:flex; gap:10px; align-items:center;}
-.card-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;}
-.tag{font-size:10px; padding:3px 9px; border-radius:100px; background:var(--panel-3); color:var(--text-dim); font-weight:700; letter-spacing:0.3px;}
+  /* ---------- series detail ---------- */
+  .breadcrumb{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);margin-bottom:20px;display:flex;gap:8px;align-items:center;}
+  .breadcrumb a:hover{color:var(--purple-fire);}
+  .series-hero{display:flex;gap:30px;margin-bottom:44px;flex-wrap:wrap;}
+  .series-cover{width:220px;aspect-ratio:3/4;object-fit:cover;border-radius:6px;border:1px solid var(--line);flex:none;background:linear-gradient(150deg,var(--purple-deep),var(--bg-void-2));}
+  .series-info{flex:1;min-width:240px;}
+  .series-info h1{font-family:var(--font-display);font-size:32px;margin:0 0 10px;}
+  .series-info p{color:var(--text-muted);font-size:14.5px;max-width:560px;}
+  .chapter-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 20px;border:1px solid var(--line);border-radius:5px;margin-bottom:10px;
+    background:var(--bg-panel);transition:.2s;cursor:pointer;
+  }
+  .chapter-row:hover{border-color:var(--purple-fire);background:var(--bg-panel-2);}
+  .chapter-left{display:flex;align-items:center;gap:16px;}
+  .chapter-num{font-family:var(--font-mono);color:var(--gold);font-size:13px;min-width:44px;}
+  .chapter-title{font-size:14.5px;color:var(--text-main);}
+  .chapter-meta{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);}
 
-/* EMPTY STATE */
-.empty{text-align:center; padding:70px 20px; border:1px dashed var(--line-bright); border-radius:20px; background:rgba(255,255,255,0.015);}
-.empty-icon{font-size:38px; margin-bottom:14px; opacity:.6;}
-.empty h3{font-size:20px; margin-bottom:8px;}
-.empty p{color:var(--text-dim); font-size:14px; margin-bottom:22px;}
+  /* ---------- reader ---------- */
+  .reader-bar{
+    position:sticky;top:65px;z-index:30;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 28px;background:rgba(10,6,17,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  }
+  .reader-title{font-size:13px;color:var(--text-muted);font-family:var(--font-mono);}
+  .reader-nav{display:flex;gap:8px;}
+  .reader-pages{max-width:760px;margin:0 auto;padding:30px 16px 90px;display:flex;flex-direction:column;gap:4px;}
+  .reader-pages img{width:100%;display:block;border-radius:2px;}
 
-/* SERIES DETAIL */
-.detail-hero{display:flex; gap:32px; margin-bottom:40px; flex-wrap:wrap;}
-.detail-cover{width:220px; border-radius:16px; overflow:hidden; flex-shrink:0; border:1px solid var(--line-bright); box-shadow:0 20px 50px rgba(0,0,0,0.5);}
-.detail-cover img{width:100%; aspect-ratio:3/4; object-fit:cover; display:block;}
-.detail-info{flex:1; min-width:260px;}
-.detail-info h1{font-size:32px; margin-bottom:10px;}
-.detail-info p{color:var(--text-dim); line-height:1.7; margin-bottom:18px; max-width:600px;}
-.chapter-list{display:flex; flex-direction:column; gap:10px;}
-.chapter-row{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:var(--panel); border:1px solid var(--line); border-radius:12px; cursor:pointer; transition:all .2s;}
-.chapter-row:hover{border-color:var(--violet-glow); background:var(--panel-2);}
-.chapter-left{display:flex; align-items:center; gap:14px;}
-.chapter-num{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,var(--crimson),var(--violet)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex-shrink:0;}
-.chapter-title{font-weight:700; font-size:14.5px;}
-.chapter-pages{font-size:11.5px; color:var(--text-faint);}
-.icon-btn{width:34px; height:34px; border-radius:8px; background:var(--panel-2); border:1px solid var(--line); color:var(--text-faint); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; transition:all .2s;}
-.icon-btn:hover{background:rgba(210,31,60,0.15); color:var(--crimson-glow); border-color:var(--crimson);}
+  /* ---------- admin / creator panel ---------- */
+  .lock-screen{max-width:380px;margin:60px auto;padding:38px 32px;border:1px solid var(--line);border-radius:8px;background:var(--bg-panel);text-align:center;}
+  .lock-screen svg{width:40px;margin-bottom:14px;opacity:.7;}
+  .lock-screen h2{font-family:var(--font-display);margin:0 0 8px;font-size:22px;}
+  .lock-screen p{color:var(--text-muted);font-size:13px;margin-bottom:22px;}
+  input[type=text],input[type=password],textarea,input[type=number]{
+    width:100%;padding:11px 13px;background:var(--bg-void-2);border:1px solid var(--line);border-radius:4px;
+    color:var(--text-main);font-family:var(--font-body);font-size:14px;margin-bottom:14px;
+  }
+  input:focus,textarea:focus{outline:none;border-color:var(--purple-fire);box-shadow:0 0 0 3px var(--purple-glow);}
+  label{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;font-family:var(--font-mono);}
+  textarea{resize:vertical;min-height:80px;}
+  .admin-grid{display:grid;grid-template-columns:1.1fr 1.5fr;gap:26px;align-items:start;}
+  @media (max-width:820px){.admin-grid{grid-template-columns:1fr;}}
+  .admin-box{border:1px solid var(--line);border-radius:8px;padding:24px;background:var(--bg-panel);}
+  .admin-box h3{font-family:var(--font-display);font-size:17px;margin:0 0 16px;color:var(--gold);}
+  .file-drop{border:1px dashed var(--line);border-radius:6px;padding:20px;text-align:center;font-size:12.5px;color:var(--text-faint);margin-bottom:14px;cursor:pointer;transition:.2s;}
+  .file-drop:hover{border-color:var(--purple-fire);color:var(--text-muted);}
+  .thumb-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .thumb-strip img{width:52px;height:70px;object-fit:cover;border-radius:3px;border:1px solid var(--line);}
+  .admin-list-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--line);border-radius:5px;margin-bottom:8px;font-size:13px;background:var(--bg-void-2);}
+  .icon-btn{background:none;border:1px solid var(--line);color:var(--text-faint);width:28px;height:28px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;}
+  .icon-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+  .status-msg{font-family:var(--font-mono);font-size:12px;padding:9px 12px;border-radius:4px;margin-bottom:14px;}
+  .status-msg.ok{background:rgba(161,94,240,.12);border:1px solid var(--purple-deep);color:var(--purple-fire);}
+  .status-msg.err{background:rgba(200,29,74,.12);border:1px solid var(--crimson-deep);color:#ff7a9c;}
+  .spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--purple-fire);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-/* READER */
-.reader{max-width:820px; margin:0 auto;}
-.reader-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--line);}
-.reader-title{font-weight:800; font-size:15px;}
-.reader-sub{font-size:11.5px; color:var(--text-faint);}
-.page-wrap{background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:20px; min-height:300px; display:flex; align-items:center; justify-content:center;}
-.page-wrap img{width:100%; display:block;}
-.reader-nav{display:flex; align-items:center; justify-content:space-between; gap:12px;}
-.page-indicator{font-size:13px; color:var(--text-dim); font-weight:700;}
-
-/* UPLOAD */
-.upload-wrap{max-width:640px; margin:0 auto;}
-.pin-gate{max-width:380px; margin:60px auto; text-align:center; background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:40px 30px;}
-.pin-gate h3{margin-bottom:8px; font-size:20px;}
-.pin-gate p{color:var(--text-dim); font-size:13.5px; margin-bottom:22px; line-height:1.6;}
-.field{margin-bottom:18px;}
-.field label{display:block; font-size:12.5px; font-weight:700; color:var(--text-dim); margin-bottom:8px; letter-spacing:0.3px; text-transform:uppercase;}
-.field input[type=text], .field input[type=password], .field input[type=number], .field textarea{
-  width:100%; padding:12px 14px; background:var(--panel-2); border:1px solid var(--line-bright); border-radius:10px;
-  color:var(--text); font-family:inherit; font-size:14px; outline:none; transition:border .2s;}
-.field input:focus, .field textarea:focus{border-color:var(--violet-glow);}
-.field textarea{resize:vertical; min-height:80px;}
-.file-drop{border:1.5px dashed var(--line-bright); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all .2s; background:var(--panel-2);}
-.file-drop:hover{border-color:var(--violet-glow); background:var(--panel-3);}
-.file-drop input{display:none;}
-.thumb-strip{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;}
-.thumb{width:56px; height:74px; border-radius:6px; overflow:hidden; position:relative; border:1px solid var(--line-bright);}
-.thumb img{width:100%; height:100%; object-fit:cover;}
-.thumb .rm{position:absolute; top:2px; right:2px; width:16px; height:16px; background:rgba(0,0,0,0.7); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; cursor:pointer;}
-.panel-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:24px; margin-bottom:24px;}
-.panel-card h3{font-size:17px; margin-bottom:16px; display:flex; align-items:center; gap:8px;}
-.manage-row{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line);}
-.manage-row:last-child{border-bottom:none;}
-.manage-name{font-weight:700; font-size:13.5px;}
-.manage-sub{font-size:11px; color:var(--text-faint); margin-top:2px;}
-.toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:var(--panel-3); border:1px solid var(--violet-glow);
-  padding:13px 22px; border-radius:100px; font-size:13.5px; font-weight:700; z-index:100; box-shadow:0 10px 30px rgba(0,0,0,0.5);
-  animation:toastin .25s ease; display:flex; align-items:center; gap:8px;}
-@keyframes toastin{from{opacity:0; transform:translate(-50%,10px);} to{opacity:1; transform:translate(-50%,0);}}
-select{width:100%; padding:12px 14px; background:var(--panel-2); border:1px solid var(--line-bright); border-radius:10px; color:var(--text); font-family:inherit; font-size:14px;}
-.spin{display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.footer{position:relative; z-index:2; text-align:center; padding:30px 5vw 50px; color:var(--text-faint); font-size:12px; border-top:1px solid var(--line);}
-.social-row{display:flex; justify-content:center; gap:14px; margin-bottom:14px; flex-wrap:wrap;}
-.social-chip{padding:8px 16px; border-radius:100px; background:var(--panel); border:1px solid var(--line); font-size:12px; font-weight:700; color:var(--text-dim);}
-
-@media(max-width:640px){
-  nav{padding:14px 5vw;} .nav-tab{padding:7px 13px; font-size:12px;}
-  .hero{padding:40px 5vw 30px;} .detail-hero{gap:20px;} .detail-cover{width:150px;}
-}
+  footer.site-footer{border-top:1px solid var(--line);padding:30px 28px;text-align:center;color:var(--text-faint);font-size:12px;font-family:var(--font-mono);}
+  footer.site-footer a{color:var(--purple-fire);}
 </style>
 </head>
 <body>
-<div class="bg-glow"></div>
-<div class="grain"></div>
-<div id="root"></div>
+<div id="app"></div>
 
 <script>
-/* ---------- storage helpers ---------- */
-async function sGet(key){
-  try{ const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
-  catch(e){ return null; }
-}
-async function sSet(key, val){
-  try{ await window.storage.set(key, JSON.stringify(val), true); return true; }
-  catch(e){ console.error('storage set failed', e); return false; }
-}
-async function sDel(key){
-  try{ await window.storage.delete(key, true); }catch(e){}
-}
-async function sList(prefix){
-  try{ const r = await window.storage.list(prefix, true); return r ? r.keys : []; }catch(e){ return []; }
-}
+/* ================= constants ================= */
+const GOOGLE_CLIENT_ID = "73724605125-da8lj58n9k3qo6jhgmhh1qcrtu18n40l.apps.googleusercontent.com";
+let FB_URL = localStorage.getItem('kav_fb_url') || 'https://facebook.com/KitsuneAniVerse';
+let googleUser = null;
+try { googleUser = JSON.parse(sessionStorage.getItem('kav_google_user') || 'null'); } catch(e) { googleUser = null; }
+let unlocked = !!googleUser;
+
+const FOX_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <path fill="none" stroke="currentColor" stroke-width="3" d="M50 20 L20 8 L28 32 Z"/>
+  <path fill="none" stroke="currentColor" stroke-width="3" d="M50 20 L80 8 L72 32 Z"/>
+  <path fill="none" stroke="currentColor" stroke-width="3" d="M50 20 C30 22 22 45 30 62 C36 74 46 82 50 90 C54 82 64 74 70 62 C78 45 70 22 50 20 Z"/>
+  <circle cx="41" cy="48" r="2.4" fill="currentColor"/>
+  <circle cx="59" cy="48" r="2.4" fill="currentColor"/>
+  <path fill="none" stroke="currentColor" stroke-width="2.4" d="M50 55 L50 60 M50 60 L45 64 M50 60 L55 64"/>
+</svg>`;
+
+const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="foxg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#e8b64c"/><stop offset="100%" stop-color="#a15ef0"/>
+  </linearGradient></defs>
+  <path fill="url(#foxg)" d="M50 12 L14 2 L26 34 Z"/>
+  <path fill="url(#foxg)" d="M50 12 L86 2 L74 34 Z"/>
+  <path fill="url(#foxg)" d="M50 14 C24 16 14 46 24 66 C32 82 44 90 50 96 C56 90 68 82 76 66 C86 46 76 16 50 14 Z"/>
+  <circle cx="39" cy="50" r="3.2" fill="#0a0611"/>
+  <circle cx="61" cy="50" r="3.2" fill="#0a0611"/>
+</svg>`;
+
+/* ================= storage helpers ================= */
+async function sGet(key, shared){ try{ return localStorage.getItem('kav_'+key); }catch(e){ return null; } }
+async function sSet(key, value, shared){ try{ localStorage.setItem('kav_'+key, value); return {ok:true}; }catch(e){ console.error(e); return null; } }
+async function sDelete(key, shared){ try{ localStorage.removeItem('kav_'+key); return {ok:true}; }catch(e){ return null; } }
 
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 
-function toast(msg){
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(), 2400);
+async function getSeriesList(){
+  const raw = await sGet('series-list', true);
+  return raw ? JSON.parse(raw) : [];
 }
+async function saveSeriesList(list){ return sSet('series-list', JSON.stringify(list), true); }
 
-function compressImage(file, maxDim, quality){
+async function getChapters(seriesId){
+  const raw = await sGet('chapters:'+seriesId, true);
+  return raw ? JSON.parse(raw) : [];
+}
+async function saveChapters(seriesId, list){ return sSet('chapters:'+seriesId, JSON.stringify(list), true); }
+
+async function getPages(chapterId){
+  const raw = await sGet('pages:'+chapterId, true);
+  return raw ? JSON.parse(raw) : [];
+}
+async function savePages(chapterId, pages){ return sSet('pages:'+chapterId, JSON.stringify(pages), true); }
+
+/* ================= image compression ================= */
+function compressImage(file, maxWidth, quality){
   return new Promise((resolve, reject)=>{
     const reader = new FileReader();
     reader.onload = (e)=>{
       const img = new Image();
       img.onload = ()=>{
         let w = img.width, h = img.height;
-        if(w > h && w > maxDim){ h = Math.round(h * (maxDim/w)); w = maxDim; }
-        else if(h > maxDim){ w = Math.round(w * (maxDim/h)); h = maxDim; }
+        if(w > maxWidth){ h = Math.round(h * (maxWidth/w)); w = maxWidth; }
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         const ctx = canvas.getContext('2d');
@@ -226,426 +266,541 @@ function compressImage(file, maxDim, quality){
   });
 }
 
-/* ---------- state ---------- */
-const state = {
-  view: 'home',            // home | detail | reader | upload
-  seriesIndex: [],
-  currentSeries: null,
-  currentChapters: [],
-  currentChapter: null,
-  currentPages: [],
-  pageIdx: 0,
-  loading: true,
-  pinOk: false,
+/* ================= router ================= */
+function parseHash(){
+  const h = location.hash.replace(/^#\/?/, '');
+  const parts = h.split('/').filter(Boolean);
+  if(parts.length === 0) return {view:'home'};
+  if(parts[0] === 'series' && parts[1]) return {view:'series', id:parts[1]};
+  if(parts[0] === 'reader' && parts[1]) return {view:'reader', id:parts[1]};
+  if(parts[0] === 'admin') return {view:'admin'};
+  return {view:'home'};
+}
+
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', render);
+
+/* ================= shell ================= */
+function shell(innerHtml, activeView){
+  return `
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="#/" class="brand">
+          ${BRAND_MARK}
+          <div>
+            <div class="brand-text">Kitsune AniVerse</div>
+            <div class="brand-sub">Fox-fire &amp; Ink</div>
+          </div>
+        </a>
+        <nav class="mainnav">
+          <a href="#/" class="navlink ${activeView==='home'?'active':''}">Home</a>
+          <a href="#/admin" class="navlink ${activeView==='admin'?'active':''}">Creator Panel</a>
+          <a href="${FB_URL}" target="_blank" class="fb-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>
+            Follow
+          </a>
+        </nav>
+      </div>
+    </header>
+    <div style="flex:1;">${innerHtml}</div>
+    <footer class="site-footer">
+      Kitsune AniVerse — original stories, self-hosted. Follow along on <a href="${FB_URL}" target="_blank">Facebook</a>.
+    </footer>
+  `;
+}
+
+function torii(){
+  return `<div class="torii-divider"><span class="line"></span>${FOX_SVG.replace('viewBox','style="color:#e8b64c" viewBox')}<span class="line r"></span></div>`;
+}
+
+/* ================= hero fire particles ================= */
+function startFireCanvas(){
+  const canvas = document.getElementById('fireCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w,h,particles;
+  function resize(){
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  particles = Array.from({length:34}, ()=>spawn());
+  function spawn(){
+    return {
+      x: Math.random()*w, y: h + Math.random()*40,
+      r: 1.5 + Math.random()*3, sp: .3 + Math.random()*.7,
+      drift: (Math.random()-.5)*.6, life: Math.random(),
+      hue: Math.random() > .5 ? '161,94,240' : '232,182,76'
+    };
+  }
+  let raf;
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.y -= p.sp; p.x += p.drift; p.life += 0.004;
+      const alpha = Math.max(0, 0.6 - p.life);
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${p.hue},${alpha})`;
+      ctx.shadowColor = `rgba(${p.hue},.8)`;
+      ctx.shadowBlur = 8;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      if(p.y < -10 || p.life > 0.6){ Object.assign(p, spawn(), {y: h+10}); }
+    });
+    raf = requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+/* ================= views ================= */
+async function renderHome(){
+  const list = await getSeriesList();
+  let cards = '';
+  if(list.length === 0){
+    cards = `<div class="empty-state">
+      ${FOX_SVG.replace('viewBox','style="color:#a15ef0;margin:0 auto" viewBox')}
+      <h3>No stories yet</h3>
+      <p>This shelf is waiting for its first chapter. Add a series from the Creator Panel to bring the verse to life.</p>
+      <a href="#/admin" class="btn btn-primary">Open Creator Panel</a>
+    </div>`;
+  } else {
+    cards = `<div class="grid">` + list.slice().reverse().map(s=>`
+      <a href="#/series/${s.id}" class="card">
+        ${s.cover ? `<img class="card-cover" src="${s.cover}" alt="${escapeHtml(s.title)} cover"/>`
+          : `<div class="card-cover placeholder">${FOX_SVG.replace('viewBox','style="color:#e8b64c" viewBox')}</div>`}
+        <div class="card-body">
+          <div class="card-title">${escapeHtml(s.title)}</div>
+          <div class="card-meta">${s.chapterCount || 0} CHAPTER${(s.chapterCount||0)===1?'':'S'}</div>
+        </div>
+      </a>`).join('') + `</div>`;
+  }
+
+  document.getElementById('app').innerHTML = shell(`
+    <section class="hero">
+      <canvas id="fireCanvas"></canvas>
+      <div class="hero-inner">
+        <span class="eyebrow-jp">狐火の物語</span>
+        <span class="eyebrow">Original Manga &amp; Art</span>
+        <h1 class="hero-title">KITSUNE<br/>ANIVERSE</h1>
+        <p class="hero-tag">Stories drawn in fox-fire and ink — a self-hosted shelf for original manga, chapter by chapter.</p>
+        <div class="hero-actions">
+          <a href="#series-shelf" class="btn btn-primary">Enter the Verse ↓</a>
+          <a href="${FB_URL}" target="_blank" class="btn btn-ghost">Follow the Page</a>
+        </div>
+        <div style="margin-top:20px;display:flex;justify-content:center;flex-direction:column;align-items:center;gap:8px;">
+          ${googleUser
+            ? `<div class="status-msg ok" style="margin:0;">Google account connected.</div><a href="#/admin" class="btn btn-ghost">Open Creator Panel</a>`
+            : `<div id="googleHomeButton"></div><div style="font-size:11px;color:var(--text-faint);">Connect Google Account to use Creator Panel</div>`}
+        </div>
+      </div>
+    </section>
+    ${torii()}
+    <section class="panel" id="series-shelf">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-title">The <span class="accent">Shelf</span></div>
+          <div class="section-count">${list.length} SERIES</div>
+        </div>
+        ${cards}
+      </div>
+    </section>
+  `, 'home');
+  startFireCanvas();
+  const homeGoogle = document.getElementById('googleHomeButton');
+  if(homeGoogle){
+    const wait = ()=>{
+      if(!window.google || !google.accounts || !google.accounts.id){ setTimeout(wait,150); return; }
+      google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select:false, cancel_on_tap_outside:false});
+      google.accounts.id.renderButton(homeGoogle, {theme:'filled_black', size:'large', shape:'rectangular', text:'continue_with', width:310});
+    };
+    wait();
+  }
+}
+
+async function renderSeries(id){
+  const list = await getSeriesList();
+  const series = list.find(s=>s.id === id);
+  if(!series){
+    document.getElementById('app').innerHTML = shell(`<section class="panel"><div class="wrap"><div class="empty-state"><h3>Series not found</h3><p>It may have been removed.</p><a href="#/" class="btn btn-primary">Back to shelf</a></div></div></section>`, 'home');
+    return;
+  }
+  const chapters = (await getChapters(id)).slice().sort((a,b)=>a.chapterNumber - b.chapterNumber);
+  const rows = chapters.length === 0
+    ? `<div class="empty-state"><h3>No chapters posted</h3><p>Chapters for this series will appear here once uploaded.</p></div>`
+    : chapters.map(c=>`
+      <a href="#/reader/${c.id}" class="chapter-row">
+        <div class="chapter-left">
+          <span class="chapter-num">#${c.chapterNumber}</span>
+          <span class="chapter-title">${escapeHtml(c.title)}</span>
+        </div>
+        <span class="chapter-meta">${c.pageCount} PG</span>
+      </a>`).join('');
+
+  document.getElementById('app').innerHTML = shell(`
+    <section class="panel" style="padding-top:36px;">
+      <div class="wrap">
+        <div class="breadcrumb"><a href="#/">Shelf</a> / <span>${escapeHtml(series.title)}</span></div>
+        <div class="series-hero">
+          ${series.cover ? `<img class="series-cover" src="${series.cover}"/>` : `<div class="series-cover"></div>`}
+          <div class="series-info">
+            <h1>${escapeHtml(series.title)}</h1>
+            <p>${escapeHtml(series.description || 'No description yet.')}</p>
+          </div>
+        </div>
+        <div class="section-head"><div class="section-title">Chapters</div></div>
+        ${rows}
+      </div>
+    </section>
+  `, 'home');
+}
+
+async function renderReader(chapterId){
+  // find series/chapter by scanning series list (small data, fine to scan)
+  const list = await getSeriesList();
+  let foundSeries=null, foundChapter=null, chaptersOfSeries=[];
+  for(const s of list){
+    const chs = await getChapters(s.id);
+    const ch = chs.find(c=>c.id === chapterId);
+    if(ch){ foundSeries = s; foundChapter = ch; chaptersOfSeries = chs.slice().sort((a,b)=>a.chapterNumber-b.chapterNumber); break; }
+  }
+  if(!foundChapter){
+    document.getElementById('app').innerHTML = shell(`<section class="panel"><div class="wrap"><div class="empty-state"><h3>Chapter not found</h3></div></div></section>`, 'home');
+    return;
+  }
+  const pages = await getPages(chapterId);
+  const idx = chaptersOfSeries.findIndex(c=>c.id===chapterId);
+  const prev = idx > 0 ? chaptersOfSeries[idx-1] : null;
+  const next = idx < chaptersOfSeries.length-1 ? chaptersOfSeries[idx+1] : null;
+
+  document.getElementById('app').innerHTML = shell(`
+    <div class="reader-bar">
+      <div>
+        <div class="breadcrumb" style="margin-bottom:2px;"><a href="#/series/${foundSeries.id}">${escapeHtml(foundSeries.title)}</a></div>
+        <div class="reader-title">Chapter ${foundChapter.chapterNumber} — ${escapeHtml(foundChapter.title)}</div>
+      </div>
+      <div class="reader-nav">
+        ${prev ? `<a href="#/reader/${prev.id}" class="btn btn-ghost">← Prev</a>` : ''}
+        ${next ? `<a href="#/reader/${next.id}" class="btn btn-ghost">Next →</a>` : ''}
+      </div>
+    </div>
+    <div class="reader-pages">
+      ${pages.length === 0 ? `<div class="empty-state" style="margin-top:30px;"><h3>No pages uploaded</h3><p>This chapter has no pages yet.</p></div>`
+        : pages.map((p,i)=>`<img src="${p}" alt="Page ${i+1}" loading="lazy"/>`).join('')}
+    </div>
+  `, 'home');
+}
+
+/* ================= google authentication ================= */
+function decodeGoogleCredential(credential){
+  try{
+    const part = credential.split('.')[1];
+    const base64 = part.replace(/-/g,'+').replace(/_/g,'/');
+    const json = decodeURIComponent(atob(base64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    return JSON.parse(json);
+  }catch(e){ return null; }
+}
+
+function handleGoogleCredential(response){
+  const profile = decodeGoogleCredential(response.credential);
+  if(!profile) return;
+  googleUser = {
+    sub: profile.sub || '',
+    name: profile.name || 'Google User',
+    email: profile.email || '',
+    picture: profile.picture || ''
+  };
+  sessionStorage.setItem('kav_google_user', JSON.stringify(googleUser));
+  unlocked = true;
+  alert('Google account connected successfully!');
+  renderAdmin();
+}
+
+function initGoogleButton(){
+  const host = document.getElementById('googleSignInButton');
+  if(!host) return;
+  const wait = ()=>{
+    if(!window.google || !google.accounts || !google.accounts.id){ setTimeout(wait,150); return; }
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false,
+      cancel_on_tap_outside: false
+    });
+    google.accounts.id.renderButton(host, {
+      theme: 'filled_black',
+      size: 'large',
+      shape: 'rectangular',
+      text: 'continue_with',
+      width: 310
+    });
+  };
+  wait();
+}
+
+window.logoutGoogle = function(){
+  try{ if(window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); }catch(e){}
+  sessionStorage.removeItem('kav_google_user');
+  googleUser = null;
+  unlocked = false;
+  renderAdmin();
 };
 
-const root = document.getElementById('root');
-
-/* ---------- data ops ---------- */
-async function loadIndex(){
-  state.seriesIndex = (await sGet('series-index')) || [];
-}
-async function openSeries(id){
-  state.loading = true; render();
-  const series = await sGet('series:' + id);
-  const chapters = (await sGet('chapters:' + id)) || [];
-  state.currentSeries = series;
-  state.currentChapters = chapters.sort((a,b)=>a.number-b.number);
-  state.view = 'detail';
-  state.loading = false;
-  render();
-}
-async function openReader(seriesId, chapterId){
-  state.loading = true; render();
-  const pages = (await sGet('pages:' + seriesId + ':' + chapterId)) || [];
-  state.currentPages = pages;
-  state.currentChapter = state.currentChapters.find(c=>c.id===chapterId);
-  state.pageIdx = 0;
-  state.view = 'reader';
-  state.loading = false;
-  render();
-}
-
-/* ---------- kitsune svg ---------- */
-function kitsuneArt(){
-  return `<svg viewBox="0 0 340 340" class="kitsune-art" style="width:100%;height:auto;">
-    <defs>
-      <linearGradient id="tailG1" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="var(--crimson-glow)"/><stop offset="100%" stop-color="var(--violet)"/>
-      </linearGradient>
-      <linearGradient id="tailG2" x1="0" y1="1" x2="1" y2="0">
-        <stop offset="0%" stop-color="var(--violet-glow)"/><stop offset="100%" stop-color="var(--crimson)"/>
-      </linearGradient>
-      <radialGradient id="coreG" cx="50%" cy="45%" r="60%">
-        <stop offset="0%" stop-color="#2a1c40"/><stop offset="100%" stop-color="#150f22"/>
-      </radialGradient>
-      <filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter>
-    </defs>
-    <path class="tail" d="M170 200 C 90 190, 40 120, 70 40 C 100 90, 130 130, 190 165 Z" fill="url(#tailG1)" opacity="0.9"/>
-    <path class="tail" d="M170 200 C 250 210, 300 150, 275 55 C 250 110, 220 140, 180 170 Z" fill="url(#tailG2)" opacity="0.85"/>
-    <path class="tail" d="M170 210 C 170 130, 200 70, 170 15 C 150 75, 150 130, 160 190 Z" fill="url(#tailG1)" opacity="0.75"/>
-    <circle cx="170" cy="215" r="78" fill="url(#coreG)" stroke="var(--line-bright)" stroke-width="1"/>
-    <path d="M130 175 L 100 130 L 145 155 Z" fill="#1d1430" stroke="var(--violet-glow)" stroke-width="1.5"/>
-    <path d="M210 175 L 240 130 L 195 155 Z" fill="#1d1430" stroke="var(--violet-glow)" stroke-width="1.5"/>
-    <path d="M155 210 Q 170 195 185 210 Q 178 240 170 245 Q 162 240 155 210 Z" fill="#0d0814"/>
-    <ellipse cx="146" cy="205" rx="5" ry="7" fill="var(--ember)" filter="url(#soft)"/>
-    <ellipse cx="194" cy="205" rx="5" ry="7" fill="var(--ember)" filter="url(#soft)"/>
-    <path d="M120 220 Q170 200 220 220" stroke="var(--crimson-glow)" stroke-width="1" fill="none" opacity="0.5"/>
-  </svg>
-  <div class="ember-dot" style="width:6px;height:6px;background:var(--ember);top:10%;left:8%;box-shadow:0 0 10px var(--ember);"></div>
-  <div class="ember-dot" style="width:4px;height:4px;background:var(--crimson-glow);top:70%;left:88%;animation-delay:1.2s;box-shadow:0 0 8px var(--crimson-glow);"></div>
-  <div class="ember-dot" style="width:5px;height:5px;background:var(--violet-glow);top:85%;left:15%;animation-delay:2.4s;box-shadow:0 0 8px var(--violet-glow);"></div>`;
-}
-
-/* ---------- render ---------- */
-function render(){
-  root.innerHTML = `
-    <nav>
-      <div class="brand" onclick="goHome()">
-        <svg class="brand-mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" fill="#150f22" stroke="var(--violet-glow)" stroke-width="1.2"/>
-          <path d="M14 15 L8 6 L17 12 Z" fill="var(--crimson-glow)"/><path d="M26 15 L32 6 L23 12 Z" fill="var(--violet-glow)"/>
-          <circle cx="16.5" cy="20" r="2" fill="var(--ember)"/><circle cx="23.5" cy="20" r="2" fill="var(--ember)"/></svg>
-        <div><div class="brand-name">Kitsune AniVerse</div><div class="brand-sub">Manga &amp; Art Portal</div></div>
-      </div>
-      <div class="nav-tabs">
-        <button class="nav-tab ${state.view==='home'||state.view==='detail'||state.view==='reader'?'active':''}" onclick="goHome()">Library</button>
-        <button class="nav-tab ${state.view==='upload'?'active':''}" onclick="goUpload()">+ Add Content</button>
-      </div>
-    </nav>
-    ${renderView()}
-    <div class="footer">
-      <div class="social-row">
-        <span class="social-chip">📺 Channel — Kitsune AniVerse</span>
-        <span class="social-chip">📘 Facebook — Kitsune AniVerse</span>
-      </div>
-      狐 Kitsune AniVerse — original manga &amp; art, straight from the tails of the fox spirit.
-    </div>
-  `;
-  if(state.view==='upload') wireUploadEvents();
-  if(state.view==='reader') window.onkeydown = readerKeys;
-  else window.onkeydown = null;
-}
-
-function renderView(){
-  if(state.view==='home') return renderHome();
-  if(state.view==='detail') return renderDetail();
-  if(state.view==='reader') return renderReader();
-  if(state.view==='upload') return renderUpload();
-  return '';
-}
-
-function renderHome(){
-  const list = state.seriesIndex;
-  return `
-  <div class="hero">
-    <div class="hero-text">
-      <div class="eyebrow">Original Manga Portal</div>
-      <h1>Tales spun in <span class="accent">ink &amp; foxfire.</span></h1>
-      <p>Kitsune AniVerse is a home-grown library of original manga and art — every page drawn, inked, and uploaded straight from the creator's desk.</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary" onclick="document.getElementById('libAnchor').scrollIntoView({behavior:'smooth'})">Browse the library ↓</button>
-        <button class="btn btn-ghost" onclick="goUpload()">+ Add new series</button>
-      </div>
-    </div>
-    <div style="position:relative;">${kitsuneArt()}</div>
-  </div>
-  <div class="section" id="libAnchor">
-    <div class="section-head">
-      <div class="section-title">Library</div>
-      <div class="section-count">${list.length} series</div>
-    </div>
-    ${state.loading ? loadingBlock() : (list.length ? `<div class="grid">${list.map(seriesCard).join('')}</div>` : emptyLibrary())}
-  </div>`;
-}
-
-function loadingBlock(){
-  return `<div style="text-align:center;padding:60px;color:var(--text-faint);"><span class="spin"></span> loading…</div>`;
-}
-
-function emptyLibrary(){
-  return `<div class="empty">
-    <div class="empty-icon">🦊</div>
-    <h3>No stories here yet</h3>
-    <p>Your library is empty. Add your first series and start uploading pages.</p>
-    <button class="btn btn-primary" onclick="goUpload()">+ Add your first series</button>
-  </div>`;
-}
-
-function seriesCard(s){
-  const cover = s.cover ? `<img class="card-cover" src="${s.cover}"/>` : `<div class="card-cover-fallback">${escapeHtml(s.title)}</div>`;
-  return `<div class="card" onclick="openSeries('${s.id}')">
-    ${cover}
-    <div class="card-body">
-      <div class="card-title">${escapeHtml(s.title)}</div>
-      <div class="card-meta">${s.chapterCount||0} chapter${(s.chapterCount||0)===1?'':'s'}</div>
-      ${s.tags && s.tags.length ? `<div class="card-tags">${s.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-    </div>
-  </div>`;
-}
-
-function renderDetail(){
-  if(state.loading) return `<div class="section">${loadingBlock()}</div>`;
-  const s = state.currentSeries;
-  if(!s) return `<div class="section"><div class="empty"><h3>Series not found</h3></div></div>`;
-  const cover = s.cover ? `<img src="${s.cover}"/>` : '';
-  return `<div class="section">
-    <div class="detail-hero">
-      <div class="detail-cover">${cover}</div>
-      <div class="detail-info">
-        <h1>${escapeHtml(s.title)}</h1>
-        ${s.tags && s.tags.length ? `<div class="card-tags" style="margin-bottom:14px;">${s.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-        <p>${escapeHtml(s.description||'')}</p>
-        <button class="btn btn-ghost" onclick="goUpload('${s.id}')">+ Add chapter</button>
-      </div>
-    </div>
-    <div class="section-head"><div class="section-title" style="font-size:19px;">Chapters</div><div class="section-count">${state.currentChapters.length}</div></div>
-    ${state.currentChapters.length ? `<div class="chapter-list">${state.currentChapters.map(chapterRow).join('')}</div>` : `<div class="empty"><div class="empty-icon">📖</div><h3>No chapters yet</h3><p>Add the first chapter to start the story.</p><button class="btn btn-primary" onclick="goUpload('${s.id}')">+ Add chapter</button></div>`}
-  </div>`;
-}
-
-function chapterRow(c){
-  return `<div class="chapter-row" onclick="openReader('${state.currentSeries.id}','${c.id}')">
-    <div class="chapter-left">
-      <div class="chapter-num">${c.number}</div>
-      <div><div class="chapter-title">${escapeHtml(c.title)}</div><div class="chapter-pages">${c.pageCount||0} page${(c.pageCount||0)===1?'':'s'}</div></div>
-    </div>
-    <div style="color:var(--text-faint);">›</div>
-  </div>`;
-}
-
-function renderReader(){
-  if(state.loading) return `<div class="section">${loadingBlock()}</div>`;
-  const pages = state.currentPages;
-  const ch = state.currentChapter;
-  if(!pages.length) return `<div class="section"><div class="empty"><h3>No pages in this chapter</h3></div></div>`;
-  const img = pages[state.pageIdx];
-  return `<div class="section reader">
-    <div class="reader-top">
-      <div><div class="reader-title">${escapeHtml(state.currentSeries.title)}</div><div class="reader-sub">${escapeHtml(ch ? ch.title : '')}</div></div>
-      <button class="btn btn-ghost" onclick="backToDetail()">← Back to series</button>
-    </div>
-    <div class="page-wrap"><img src="${img}"/></div>
-    <div class="reader-nav">
-      <button class="btn btn-ghost" onclick="turnPage(-1)" ${state.pageIdx===0?'disabled style="opacity:.35;cursor:default;"':''}>← Prev</button>
-      <div class="page-indicator">Page ${state.pageIdx+1} / ${pages.length}</div>
-      <button class="btn btn-ghost" onclick="turnPage(1)" ${state.pageIdx===pages.length-1?'disabled style="opacity:.35;cursor:default;"':''}>Next →</button>
-    </div>
-  </div>`;
-}
-
-function turnPage(d){
-  const n = state.pageIdx + d;
-  if(n<0 || n>=state.currentPages.length) return;
-  state.pageIdx = n;
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function readerKeys(e){
-  if(e.key==='ArrowRight') turnPage(1);
-  if(e.key==='ArrowLeft') turnPage(-1);
-}
-function backToDetail(){ state.view='detail'; render(); }
-
-/* ---------- upload ---------- */
-let uploadStagedCover = null;
-let uploadStagedPages = [];
-let uploadTargetSeriesId = null;
-
-function goHome(){ state.view='home'; loadIndex().then(render); }
-function goUpload(seriesId){
-  uploadTargetSeriesId = seriesId || null;
-  state.view = 'upload';
-  render();
-}
-
-function renderUpload(){
-  if(!state.pinOk) return renderPinGate();
-  return `<div class="section upload-wrap">
-    <div class="panel-card">
-      <h3>🦊 New series</h3>
-      <div class="field"><label>Title</label><input type="text" id="f-title" placeholder="e.g. Moonlit Shrine"></div>
-      <div class="field"><label>Tagline / short description</label><textarea id="f-desc" placeholder="What's this story about?"></textarea></div>
-      <div class="field"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="fantasy, romance, action"></div>
-      <div class="field"><label>Cover image</label>
-        <label class="file-drop">
-          <input type="file" id="f-cover" accept="image/*">
-          <div id="cover-drop-text">Click to choose a cover image</div>
-        </label>
-        <div id="cover-preview" class="thumb-strip"></div>
-      </div>
-      <button class="btn btn-primary" id="btn-save-series">Save series</button>
-    </div>
-
-    <div class="panel-card">
-      <h3>📖 Add chapter to existing series</h3>
-      <div class="field"><label>Series</label>
-        <select id="f-chapter-series">
-          <option value="">— choose a series —</option>
-          ${state.seriesIndex.map(s=>`<option value="${s.id}" ${uploadTargetSeriesId===s.id?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
-        </select>
-      </div>
-      <div class="field"><label>Chapter number</label><input type="number" id="f-ch-num" placeholder="1"></div>
-      <div class="field"><label>Chapter title</label><input type="text" id="f-ch-title" placeholder="e.g. The First Ember"></div>
-      <div class="field"><label>Pages (select images in reading order)</label>
-        <label class="file-drop">
-          <input type="file" id="f-pages" accept="image/*" multiple>
-          <div id="pages-drop-text">Click to choose page images (multi-select)</div>
-        </label>
-        <div id="pages-preview" class="thumb-strip"></div>
-      </div>
-      <button class="btn btn-primary" id="btn-save-chapter">Save chapter</button>
-    </div>
-
-    <div class="panel-card">
-      <h3>🗂 Manage library</h3>
-      ${state.seriesIndex.length ? state.seriesIndex.map(s=>`
-        <div class="manage-row">
-          <div><div class="manage-name">${escapeHtml(s.title)}</div><div class="manage-sub">${s.chapterCount||0} chapters</div></div>
-          <div style="display:flex;gap:8px;">
-            <div class="icon-btn" title="View" onclick="openSeries('${s.id}')">👁</div>
-            <div class="icon-btn" title="Delete series" onclick="deleteSeries('${s.id}')">✕</div>
+/* ================= admin ================= */
+async function renderAdmin(){
+  if(!unlocked){
+    document.getElementById('app').innerHTML = shell(`
+      <section class="panel" style="padding-top:50px;">
+        <div class="wrap">
+          <div class="lock-screen">
+            ${FOX_SVG.replace('viewBox','style="color:#a15ef0;margin:0 auto" viewBox')}
+            <h2>Creator Panel</h2>
+            <p>Connect your Google account to access the creator tools.</p>
+            <div id="googleSignInButton" style="display:flex;justify-content:center;margin:18px 0 8px;"></div>
+            <div style="color:var(--text-faint);font-size:11px;margin-top:12px;">Secure sign-in powered by Google.</div>
           </div>
-        </div>`).join('') : `<div style="color:var(--text-faint);font-size:13px;">Nothing added yet.</div>`}
-    </div>
-  </div>`;
-}
-
-function renderPinGate(){
-  return `<div class="section"><div class="pin-gate">
-    <h3>🔒 Creator area</h3>
-    <p id="pin-copy">Loading…</p>
-    <div class="field"><input type="password" id="pin-input" placeholder="PIN"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;" id="pin-submit">Continue</button>
-  </div></div>`;
-}
-
-async function wireUploadEvents(){
-  if(!state.pinOk){
-    const existingPin = await sGet('creator-pin');
-    const copyEl = document.getElementById('pin-copy');
-    if(copyEl){
-      copyEl.textContent = existingPin
-        ? "Enter the creator PIN to add or edit content. (This is a light gate, not real security — anyone with the PIN can edit.)"
-        : "No PIN set yet. Choose one now — you'll use it every time you come back to add content.";
-    }
-    const btn = document.getElementById('pin-submit');
-    if(btn) btn.onclick = async ()=>{
-      const val = document.getElementById('pin-input').value.trim();
-      if(!val){ toast('Enter a PIN first'); return; }
-      if(!existingPin){
-        await sSet('creator-pin', val);
-        state.pinOk = true; render(); toast('PIN set — welcome!');
-      } else if(val === existingPin){
-        state.pinOk = true; render();
-      } else {
-        toast('Wrong PIN');
-      }
-    };
+        </div>
+      </section>
+    `, 'admin');
+    initGoogleButton();
     return;
   }
 
-  // cover file
-  const coverInput = document.getElementById('f-cover');
-  if(coverInput) coverInput.onchange = async ()=>{
-    const file = coverInput.files[0];
+  const list = await getSeriesList();
+  document.getElementById('app').innerHTML = shell(`
+    <section class="panel" style="padding-top:36px;">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-title">Creator <span class="accent">Panel</span></div>
+            ${googleUser ? `<div style="margin-top:6px;color:var(--text-muted);font-size:12px;">Connected as: <strong style="color:var(--gold);">${escapeHtml(googleUser.name)}</strong></div>` : ''}
+          </div>
+          <button class="btn btn-ghost" onclick="logoutGoogle()">Logout</button>
+        </div><div class="status-msg ok">This GitHub version stores your manga in this browser. It works without paid hosting, but visitors on other devices will not see uploads unless we connect Firebase.</div>
+        <div class="admin-grid">
+          <div class="admin-box">
+            <h3>New Series</h3>
+            <div id="seriesStatus"></div>
+            <label>Title</label>
+            <input type="text" id="newSeriesTitle" placeholder="e.g. Nine Tails Requiem"/>
+            <label>Description</label>
+            <textarea id="newSeriesDesc" placeholder="A short blurb about the story..."></textarea>
+            <label>Cover Image</label>
+            <div class="file-drop" id="coverDrop">Click to choose a cover image</div>
+            <input type="file" id="coverInput" accept="image/*" style="display:none;"/>
+            <div class="thumb-strip" id="coverPreview"></div>
+            <button class="btn btn-primary" id="createSeriesBtn" style="width:100%;justify-content:center;">Add Series</button>
+          </div>
+
+          <div class="admin-box">
+            <h3>Existing Series</h3>
+            ${list.length===0 ? `<p style="color:var(--text-faint);font-size:13px;">No series yet — add one on the left.</p>` :
+              list.map(s=>`
+                <div class="admin-list-row">
+                  <span>${escapeHtml(s.title)} <span style="color:var(--text-faint);">— ${s.chapterCount||0} ch.</span></span>
+                  <span style="display:flex;gap:6px;">
+                    <a href="#/admin/chapters/${s.id}" class="btn btn-ghost" style="padding:5px 12px;font-size:11px;" onclick="event.preventDefault(); openChapterManager('${s.id}')">Manage</a>
+                    <button class="btn btn-ghost" style="padding:5px 10px;font-size:11px;" onclick="editSeriesPrompt('${s.id}')">Edit</button>
+                    <button class="icon-btn" onclick="deleteSeriesConfirm('${s.id}')">✕</button>
+                  </span>
+                </div>
+              `).join('')}
+          </div>
+        </div>
+
+        <div class="admin-box" style="margin-top:30px;">
+          <h3>Facebook Page</h3>
+          <label>Facebook URL</label>
+          <input type="text" id="fbUrlInput" value="${escapeHtml(FB_URL)}" placeholder="https://facebook.com/yourpage"/>
+          <button class="btn btn-primary" id="saveFbBtn">Save Facebook Link</button>
+          <div id="fbStatus" style="margin-top:10px;"></div>
+        </div>
+        <div id="chapterManagerHost" style="margin-top:30px;"></div>
+      </div>
+    </section>
+  `, 'admin');
+
+  // cover upload handling
+  let coverDataUrl = null;
+  document.getElementById('coverDrop').addEventListener('click', ()=>document.getElementById('coverInput').click());
+  document.getElementById('coverInput').addEventListener('change', async (e)=>{
+    const file = e.target.files[0];
     if(!file) return;
-    document.getElementById('cover-drop-text').textContent = 'Compressing…';
-    uploadStagedCover = await compressImage(file, 700, 0.78);
-    document.getElementById('cover-drop-text').textContent = 'Click to change cover image';
-    document.getElementById('cover-preview').innerHTML = `<div class="thumb" style="width:70px;height:92px;"><img src="${uploadStagedCover}"></div>`;
-  };
-
-  const saveSeriesBtn = document.getElementById('btn-save-series');
-  if(saveSeriesBtn) saveSeriesBtn.onclick = async ()=>{
-    const title = document.getElementById('f-title').value.trim();
-    if(!title){ toast('Give the series a title'); return; }
-    saveSeriesBtn.innerHTML = '<span class="spin"></span> Saving…'; saveSeriesBtn.disabled = true;
-    const desc = document.getElementById('f-desc').value.trim();
-    const tags = document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-    const id = uid();
-    const seriesObj = { id, title, description: desc, tags, cover: uploadStagedCover };
-    await sSet('series:'+id, seriesObj);
-    await sSet('chapters:'+id, []);
-    state.seriesIndex.push({ id, title, cover: uploadStagedCover, tags, chapterCount: 0 });
-    await sSet('series-index', state.seriesIndex);
-    uploadStagedCover = null;
-    toast('Series saved ✓');
-    saveSeriesBtn.textContent = 'Save series'; saveSeriesBtn.disabled = false;
-    render();
-  };
-
-  // pages files
-  const pagesInput = document.getElementById('f-pages');
-  if(pagesInput) pagesInput.onchange = async ()=>{
-    const files = Array.from(pagesInput.files);
-    if(!files.length) return;
-    document.getElementById('pages-drop-text').textContent = 'Compressing ' + files.length + ' image(s)…';
-    uploadStagedPages = [];
-    for(const f of files){
-      const b64 = await compressImage(f, 1100, 0.7);
-      uploadStagedPages.push(b64);
+    document.getElementById('coverDrop').textContent = 'Compressing...';
+    try{
+      coverDataUrl = await compressImage(file, 600, 0.8);
+      document.getElementById('coverPreview').innerHTML = `<img src="${coverDataUrl}"/>`;
+      document.getElementById('coverDrop').textContent = 'Click to change cover image';
+    }catch(err){
+      document.getElementById('coverDrop').textContent = 'Failed to read image — click to try again';
     }
-    document.getElementById('pages-drop-text').textContent = 'Click to change pages';
-    renderPagePreview();
-  };
+  });
 
-  const saveChapterBtn = document.getElementById('btn-save-chapter');
-  if(saveChapterBtn) saveChapterBtn.onclick = async ()=>{
-    const seriesId = document.getElementById('f-chapter-series').value;
-    const num = parseFloat(document.getElementById('f-ch-num').value) || 1;
-    const title = document.getElementById('f-ch-title').value.trim() || ('Chapter ' + num);
-    if(!seriesId){ toast('Choose a series first'); return; }
-    if(!uploadStagedPages.length){ toast('Add at least one page'); return; }
-    saveChapterBtn.innerHTML = '<span class="spin"></span> Saving…'; saveChapterBtn.disabled = true;
-    const chId = uid();
-    const chapters = (await sGet('chapters:'+seriesId)) || [];
-    chapters.push({ id: chId, number: num, title, pageCount: uploadStagedPages.length });
-    await sSet('chapters:'+seriesId, chapters);
-    await sSet('pages:'+seriesId+':'+chId, uploadStagedPages);
-    const idxEntry = state.seriesIndex.find(s=>s.id===seriesId);
-    if(idxEntry) idxEntry.chapterCount = chapters.length;
-    await sSet('series-index', state.seriesIndex);
-    uploadStagedPages = [];
-    toast('Chapter saved ✓');
-    saveChapterBtn.textContent = 'Save chapter'; saveChapterBtn.disabled = false;
-    render();
-  };
-}
+  document.getElementById('createSeriesBtn').addEventListener('click', async ()=>{
+    const title = document.getElementById('newSeriesTitle').value.trim();
+    const desc = document.getElementById('newSeriesDesc').value.trim();
+    const statusEl = document.getElementById('seriesStatus');
+    if(!title){
+      statusEl.innerHTML = `<div class="status-msg err">Give the series a title first.</div>`;
+      return;
+    }
+    statusEl.innerHTML = `<div class="status-msg ok"><span class="spinner"></span> Saving...</div>`;
+    try{
+      const current = await getSeriesList();
+      current.push({id: uid(), title, description: desc, cover: coverDataUrl, chapterCount: 0, createdAt: Date.now()});
+      const ok = await saveSeriesList(current);
+      if(!ok) throw new Error('storage failed');
+      statusEl.innerHTML = `<div class="status-msg ok">Series added.</div>`;
+      setTimeout(renderAdmin, 500);
+    }catch(err){
+      statusEl.innerHTML = `<div class="status-msg err">Could not save — try a smaller cover image or try again.</div>`;
+    }
+  });
 
-function renderPagePreview(){
-  const el = document.getElementById('pages-preview');
-  if(!el) return;
-  el.innerHTML = uploadStagedPages.map((p,i)=>`<div class="thumb"><img src="${p}"><div class="rm" onclick="removeStagedPage(${i})">✕</div></div>`).join('');
-}
-function removeStagedPage(i){
-  uploadStagedPages.splice(i,1);
-  renderPagePreview();
+  document.getElementById('saveFbBtn').addEventListener('click', ()=>{
+    const url = document.getElementById('fbUrlInput').value.trim();
+    if(!/^https?:\/\//i.test(url)){
+      document.getElementById('fbStatus').innerHTML = '<div class="status-msg err">Enter a valid Facebook URL.</div>';
+      return;
+    }
+    localStorage.setItem('kav_fb_url', url);
+    document.getElementById('fbStatus').innerHTML = '<div class="status-msg ok">Facebook link saved. Refresh the page to apply it everywhere.</div>';
+  });
 }
 
-async function deleteSeries(id){
-  if(!confirm('Delete this series and all its chapters? This can\\'t be undone.')) return;
-  const chapters = (await sGet('chapters:'+id)) || [];
-  for(const c of chapters){ await sDel('pages:'+id+':'+c.id); }
-  await sDel('chapters:'+id);
-  await sDel('series:'+id);
-  state.seriesIndex = state.seriesIndex.filter(s=>s.id!==id);
-  await sSet('series-index', state.seriesIndex);
-  toast('Series deleted');
-  render();
+window.editSeriesPrompt = async function(id){
+  const list = await getSeriesList();
+  const s = list.find(x=>x.id===id);
+  if(!s) return;
+  const title = prompt('Series title:', s.title);
+  if(title===null) return;
+  const desc = prompt('Series description:', s.description || '');
+  if(desc===null) return;
+  s.title = title.trim() || s.title;
+  s.description = desc.trim();
+  await saveSeriesList(list);
+  renderAdmin();
+};
+
+window.deleteSeriesConfirm = async function(id){
+  if(!confirm('Delete this series and all its chapters? This cannot be undone.')) return;
+  const list = await getSeriesList();
+  const target = list.find(s=>s.id===id);
+  const filtered = list.filter(s=>s.id!==id);
+  await saveSeriesList(filtered);
+  if(target){
+    const chs = await getChapters(id);
+    for(const c of chs){ await sDelete('pages:'+c.id, true); }
+    await sDelete('chapters:'+id, true);
+  }
+  renderAdmin();
+};
+
+window.openChapterManager = async function(seriesId){
+  const host = document.getElementById('chapterManagerHost');
+  const series = (await getSeriesList()).find(s=>s.id===seriesId);
+  const chapters = (await getChapters(seriesId)).slice().sort((a,b)=>a.chapterNumber-b.chapterNumber);
+
+  host.innerHTML = `
+    <div class="admin-box">
+      <h3>Chapters — ${escapeHtml(series.title)}</h3>
+      <div id="chapterStatus"></div>
+      <label>Chapter Number</label>
+      <input type="number" id="chNum" value="${chapters.length+1}"/>
+      <label>Chapter Title</label>
+      <input type="text" id="chTitle" placeholder="e.g. The Lantern Path"/>
+      <label>Pages (select multiple images, in order)</label>
+      <div class="file-drop" id="pagesDrop">Click to choose page images</div>
+      <input type="file" id="pagesInput" accept="image/*" multiple style="display:none;"/>
+      <div class="thumb-strip" id="pagesPreview"></div>
+      <button class="btn btn-primary" id="addChapterBtn" style="width:100%;justify-content:center;">Add Chapter</button>
+
+      <div style="margin-top:24px;">
+        ${chapters.length===0 ? `<p style="color:var(--text-faint);font-size:13px;">No chapters yet.</p>` :
+          chapters.map(c=>`
+            <div class="admin-list-row">
+              <span>#${c.chapterNumber} — ${escapeHtml(c.title)} <span style="color:var(--text-faint);">(${c.pageCount} pg)</span></span>
+              <button class="icon-btn" onclick="deleteChapterConfirm('${seriesId}','${c.id}')">✕</button>
+            </div>
+          `).join('')}
+      </div>
+    </div>
+  `;
+
+  let pageDataUrls = [];
+  document.getElementById('pagesDrop').addEventListener('click', ()=>document.getElementById('pagesInput').click());
+  document.getElementById('pagesInput').addEventListener('change', async (e)=>{
+    const files = Array.from(e.target.files);
+    if(files.length===0) return;
+    document.getElementById('pagesDrop').textContent = 'Compressing pages...';
+    try{
+      pageDataUrls = [];
+      for(const f of files){
+        const d = await compressImage(f, 1000, 0.72);
+        pageDataUrls.push(d);
+      }
+      document.getElementById('pagesPreview').innerHTML = pageDataUrls.map(p=>`<img src="${p}"/>`).join('');
+      document.getElementById('pagesDrop').textContent = `${pageDataUrls.length} page(s) ready — click to replace`;
+    }catch(err){
+      document.getElementById('pagesDrop').textContent = 'Failed to read images — click to try again';
+    }
+  });
+
+  document.getElementById('addChapterBtn').addEventListener('click', async ()=>{
+    const num = parseInt(document.getElementById('chNum').value, 10) || (chapters.length+1);
+    const title = document.getElementById('chTitle').value.trim();
+    const statusEl = document.getElementById('chapterStatus');
+    if(!title){ statusEl.innerHTML = `<div class="status-msg err">Give the chapter a title.</div>`; return; }
+    if(pageDataUrls.length===0){ statusEl.innerHTML = `<div class="status-msg err">Add at least one page image.</div>`; return; }
+    statusEl.innerHTML = `<div class="status-msg ok"><span class="spinner"></span> Uploading pages...</div>`;
+    try{
+      const chapterId = uid();
+      const pagesOk = await savePages(chapterId, pageDataUrls);
+      if(!pagesOk) throw new Error('pages save failed — likely too large');
+      const currentChapters = await getChapters(seriesId);
+      currentChapters.push({id: chapterId, title, chapterNumber: num, pageCount: pageDataUrls.length, createdAt: Date.now()});
+      await saveChapters(seriesId, currentChapters);
+      const seriesList = await getSeriesList();
+      const idx = seriesList.findIndex(s=>s.id===seriesId);
+      if(idx>-1){ seriesList[idx].chapterCount = currentChapters.length; await saveSeriesList(seriesList); }
+      statusEl.innerHTML = `<div class="status-msg ok">Chapter added.</div>`;
+      setTimeout(()=>openChapterManager(seriesId), 500);
+    }catch(err){
+      statusEl.innerHTML = `<div class="status-msg err">Could not save — this chapter may be too large. Try fewer or smaller pages.</div>`;
+    }
+  });
+};
+
+window.deleteChapterConfirm = async function(seriesId, chapterId){
+  if(!confirm('Delete this chapter and its pages?')) return;
+  const chapters = await getChapters(seriesId);
+  const filtered = chapters.filter(c=>c.id!==chapterId);
+  await saveChapters(seriesId, filtered);
+  await sDelete('pages:'+chapterId, true);
+  const seriesList = await getSeriesList();
+  const idx = seriesList.findIndex(s=>s.id===seriesId);
+  if(idx>-1){ seriesList[idx].chapterCount = filtered.length; await saveSeriesList(seriesList); }
+  openChapterManager(seriesId);
+};
+
+/* ================= utils ================= */
+function escapeHtml(str){
+  return String(str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-function escapeHtml(s){
-  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ================= main render dispatch ================= */
+async function render(){
+  const route = parseHash();
+  try{
+    if(route.view === 'home') await renderHome();
+    else if(route.view === 'series') await renderSeries(route.id);
+    else if(route.view === 'reader') await renderReader(route.id);
+    else if(route.view === 'admin') await renderAdmin();
+  }catch(err){
+    console.error(err);
+    document.getElementById('app').innerHTML = shell(`<section class="panel"><div class="wrap"><div class="empty-state"><h3>Something went wrong</h3><p>${escapeHtml(err.message||'Unknown error')}</p><a href="#/" class="btn btn-primary">Back to shelf</a></div></div></section>`, 'home');
+  }
 }
-
-/* ---------- boot ---------- */
-async function boot(){
-  render();
-  await loadIndex();
-  state.loading = false;
-  render();
-}
-boot();
 </script>
 </body>
 </html>
