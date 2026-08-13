@@ -1,0 +1,35 @@
+KITSUNE ANIVERSE — ONE-TIME SETUP
+
+1. GitHub Pages
+- Replace the repository's index.html with the included index.html.
+- Commit/publish it.
+
+2. Firebase
+- Create a Firebase project.
+- Authentication > Sign-in method > enable Google.
+- Authentication > Settings > Authorized domains: add your GitHub Pages domain, e.g. YOURUSER.github.io.
+- Firestore Database: create database.
+- Storage: create storage.
+- Project settings > Your apps > Web app: copy the firebaseConfig values into index.html.
+- In index.html replace YOUR_GMAIL@gmail.com in ADMIN_EMAILS with your Gmail.
+
+3. Firebase security rules
+- Paste firestore.rules into Firestore Database > Rules.
+- Paste storage.rules into Storage > Rules.
+- Replace YOUR_GMAIL@gmail.com in BOTH rules files with the same admin Gmail.
+
+4. What the site can do
+- Google/Gmail sign-in gate for visitors.
+- Admin-only Creator Panel.
+- Add/edit/delete series.
+- Add/edit/delete chapters.
+- Add/delete individual uploaded files.
+- Upload multiple manga images per chapter.
+- Upload video files.
+- Up to 200 MB per file from the site; Firebase Storage supports much larger files.
+- Change site name, hero text, description, logo, Facebook, Instagram and YouTube links from Creator Panel.
+- Public visitors can read the published library after Google sign-in.
+
+5. Important
+- GitHub Pages itself cannot store 100–200 MB uploads. Firebase Storage is used for the actual files; Firestore stores metadata.
+- Do not put a Firebase service-account private key in this HTML. The Web App config is intended for browser use; security comes from Firebase Auth + Rules.
