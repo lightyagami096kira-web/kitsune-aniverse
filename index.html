@@ -7,12 +7,14 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   background:#0b0712;
   color:#fff;
   font-family:Arial,sans-serif;
 }
+
 header{
   padding:18px 30px;
   background:#130c1d;
@@ -21,31 +23,54 @@ header{
   justify-content:space-between;
   align-items:center;
 }
-.logo{
+
+.logoArea{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logoImage{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  border-radius:6px;
+  display:none;
+}
+
+.logoText{
   font-size:22px;
   font-weight:bold;
   color:#e8b64c;
 }
+
 nav a{
   color:#ddd;
   margin-left:18px;
   text-decoration:none;
 }
+
 .container{
   max-width:1100px;
   margin:auto;
   padding:30px 20px;
 }
+
 .hero{
   text-align:center;
   padding:70px 20px;
 }
+
 .hero h1{
   font-size:55px;
   margin:10px 0;
   color:#c78cff;
 }
-.hero p{color:#aaa}
+
+.hero p{
+  color:#aaa;
+}
+
 button{
   border:0;
   padding:12px 20px;
@@ -54,8 +79,13 @@ button{
   color:#fff;
   cursor:pointer;
   font-weight:bold;
+  margin:4px;
 }
-button:hover{opacity:.85}
+
+button:hover{
+  opacity:.85;
+}
+
 .card{
   background:#171020;
   border:1px solid #382544;
@@ -63,6 +93,7 @@ button:hover{opacity:.85}
   padding:20px;
   margin-bottom:20px;
 }
+
 input,textarea,select{
   width:100%;
   padding:12px;
@@ -72,11 +103,16 @@ input,textarea,select{
   border:1px solid #443052;
   border-radius:5px;
 }
+
 label{
   color:#c9b7d8;
   font-size:13px;
 }
-.hidden{display:none!important}
+
+.hidden{
+  display:none!important;
+}
+
 .social a{
   display:inline-block;
   margin:6px;
@@ -86,6 +122,7 @@ label{
   color:#fff;
   text-decoration:none;
 }
+
 .post{
   border:1px solid #35233f;
   background:#140d1c;
@@ -93,45 +130,131 @@ label{
   border-radius:8px;
   margin-bottom:18px;
 }
-.post img,.post video{
+
+.post img,
+.post video{
   max-width:100%;
   border-radius:6px;
   margin-top:10px;
 }
-.small{color:#888;font-size:12px}
-.danger{background:#a52245}
-.success{color:#70e09b}
+
+.post iframe{
+  width:100%;
+  height:700px;
+  border:0;
+  border-radius:6px;
+  margin-top:10px;
+  background:#fff;
+}
+
+.small{
+  color:#888;
+  font-size:12px;
+}
+
+.danger{
+  background:#a52245;
+}
+
+.success{
+  color:#70e09b;
+}
+
+.warning{
+  color:#e8b64c;
+}
+
+.progressBox{
+  width:100%;
+  height:10px;
+  background:#0e0915;
+  border-radius:10px;
+  overflow:hidden;
+  margin:10px 0;
+}
+
+.progressBar{
+  width:0%;
+  height:100%;
+  background:#8c42d8;
+  transition:width .2s;
+}
+
+.previewLogo{
+  max-width:120px;
+  max-height:80px;
+  display:none;
+  margin:10px 0;
+  border-radius:6px;
+}
+
+.editBox{
+  border-top:1px solid #35233f;
+  margin-top:15px;
+  padding-top:15px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">🦊 Kitsune AniVerse</div>
+
+  <div class="logoArea">
+
+    <img
+      id="logoImage"
+      class="logoImage"
+      alt="Website Logo">
+
+    <div
+      id="logoText"
+      class="logoText">
+      🦊 Kitsune AniVerse
+    </div>
+
+  </div>
 
   <nav>
     <a href="#" onclick="showHome()">Home</a>
     <a href="#" onclick="showCreator()">Creator Panel</a>
   </nav>
+
 </header>
+
 
 <main class="container">
 
 <section id="home">
+
   <div class="hero">
+
     <h1>KITSUNE ANIVERSE</h1>
-    <p>Original manga, art, stories & videos.</p>
 
-    <div id="socialLinks" class="social"></div>
+    <p>
+      Original manga, art, stories & videos.
+    </p>
 
-    <button id="homeLoginBtn" onclick="googleLogin()">
+    <div
+      id="socialLinks"
+      class="social">
+    </div>
+
+    <button
+      id="homeLoginBtn"
+      onclick="googleLogin()">
       Connect Google Account
     </button>
 
-    <p id="homeUserInfo" class="small"></p>
+    <p
+      id="homeUserInfo"
+      class="small">
+    </p>
+
   </div>
 
   <div id="posts"></div>
+
 </section>
 
 
@@ -141,9 +264,15 @@ label{
 
     <h2>Creator Panel</h2>
 
-    <p id="userInfo" class="small">Not connected.</p>
+    <p
+      id="userInfo"
+      class="small">
+      Not connected.
+    </p>
 
-    <button id="creatorLoginBtn" onclick="googleLogin()">
+    <button
+      id="creatorLoginBtn"
+      onclick="googleLogin()">
       Connect / Login with Google
     </button>
 
@@ -154,28 +283,72 @@ label{
   </div>
 
 
-  <div id="adminPanel" class="hidden">
+  <div
+    id="adminPanel"
+    class="hidden">
+
+
+    <!-- WEBSITE SETTINGS -->
 
     <div class="card">
 
       <h2>Website Settings</h2>
 
-      <label>Website Name</label>
-      <input id="siteName" placeholder="Kitsune AniVerse">
 
-      <label>Facebook URL</label>
-      <input id="facebook" placeholder="https://facebook.com/...">
+      <label>
+        Website Name
+      </label>
 
-      <label>Instagram URL</label>
-      <input id="instagram" placeholder="https://instagram.com/...">
+      <input
+        id="siteName"
+        placeholder="Kitsune AniVerse">
 
-      <label>YouTube URL</label>
-      <input id="youtube" placeholder="https://youtube.com/...">
 
-      <label>Website Logo</label>
-      <input type="file" id="logoFile" accept="image/*">
+      <label>
+        Facebook URL
+      </label>
 
-      <button onclick="saveSettings()">
+      <input
+        id="facebook"
+        placeholder="https://facebook.com/...">
+
+
+      <label>
+        Instagram URL
+      </label>
+
+      <input
+        id="instagram"
+        placeholder="https://instagram.com/...">
+
+
+      <label>
+        YouTube URL
+      </label>
+
+      <input
+        id="youtube"
+        placeholder="https://youtube.com/...">
+
+
+      <label>
+        Website Logo
+      </label>
+
+      <input
+        type="file"
+        id="logoFile"
+        accept="image/*">
+
+
+      <img
+        id="logoPreview"
+        class="previewLogo"
+        alt="Logo Preview">
+
+
+      <button
+        onclick="saveSettings()">
         Save Website Settings
       </button>
 
@@ -184,27 +357,69 @@ label{
     </div>
 
 
+    <!-- CREATE POST -->
+
     <div class="card">
 
-      <h2>Create New Post</h2>
+      <h2>
+        Create New Post / Manga
+      </h2>
 
-      <label>Post Title</label>
-      <input id="postTitle" placeholder="Post title">
 
-      <label>Description</label>
+      <label>
+        Post / Manga Title
+      </label>
+
+      <input
+        id="postTitle"
+        placeholder="Chapter 1 - The Beginning">
+
+
+      <label>
+        Description
+      </label>
+
       <textarea
         id="postDescription"
-        placeholder="Write something..."
-      ></textarea>
+        placeholder="Write something...">
+      </textarea>
 
-      <label>Upload Image / Video</label>
+
+      <label>
+        Upload Image / Video / PDF
+      </label>
+
       <input
         type="file"
         id="postFile"
-        accept="image/*,video/*"
-      >
+        accept="image/*,video/*,application/pdf,.pdf">
 
-      <button onclick="uploadPost()">
+
+      <div
+        id="uploadProgressArea"
+        class="hidden">
+
+        <div
+          class="progressBox">
+
+          <div
+            id="uploadProgressBar"
+            class="progressBar">
+          </div>
+
+        </div>
+
+        <p
+          id="uploadProgressText"
+          class="small">
+          Uploading... 0%
+        </p>
+
+      </div>
+
+
+      <button
+        onclick="uploadPost()">
         Publish Post
       </button>
 
@@ -213,9 +428,14 @@ label{
     </div>
 
 
+    <!-- MANAGE POSTS -->
+
     <div class="card">
 
-      <h2>Manage Posts</h2>
+      <h2>
+        Manage Posts / Manga
+      </h2>
+
       <div id="adminPosts"></div>
 
     </div>
@@ -227,12 +447,11 @@ label{
 </main>
 
 
-<!-- Firebase -->
-
 <script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 
 import {
   getAuth,
@@ -242,6 +461,7 @@ import {
   onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 
 import {
   getFirestore,
@@ -253,9 +473,11 @@ import {
   setDoc,
   getDoc,
   query,
-  orderBy
+  orderBy,
+  updateDoc
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 
 import {
   getStorage,
@@ -272,13 +494,28 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 ========================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSOp-P6Wec72xmjE581dOVmheJ-ytQf2w",
-  authDomain: "kitsune-aniverse.firebaseapp.com",
-  projectId: "kitsune-aniverse",
-  storageBucket: "kitsune-aniverse.firebasestorage.app",
-  messagingSenderId: "73724605125",
-  appId: "1:73724605125:web:8f6a0577ada949a26f36ac",
-  measurementId: "G-5RMPCXW8GF"
+
+  apiKey:
+    "AIzaSyCSOp-P6Wec72xmjE581dOVmheJ-ytQf2w",
+
+  authDomain:
+    "kitsune-aniverse.firebaseapp.com",
+
+  projectId:
+    "kitsune-aniverse",
+
+  storageBucket:
+    "kitsune-aniverse.firebasestorage.app",
+
+  messagingSenderId:
+    "73724605125",
+
+  appId:
+    "1:73724605125:web:8f6a0577ada949a26f36ac",
+
+  measurementId:
+    "G-5RMPCXW8GF"
+
 };
 
 
@@ -286,22 +523,28 @@ const firebaseConfig = {
    INITIALIZE FIREBASE
 ========================= */
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+  getAuth(app);
 
-const db = getFirestore(app);
+const db =
+  getFirestore(app);
 
-const storage = getStorage(app);
+const storage =
+  getStorage(app);
 
-const provider = new GoogleAuthProvider();
+const provider =
+  new GoogleAuthProvider();
 
 
 /* =========================
    ADMIN EMAIL
 ========================= */
 
-const ADMIN_EMAIL = "lightyagami096kira@gmail.com";
+const ADMIN_EMAIL =
+  "lightyagami096kira@gmail.com";
 
 
 /* =========================
@@ -315,14 +558,19 @@ let currentUser = null;
    GOOGLE LOGIN
 ========================= */
 
-window.googleLogin = async function(){
+window.googleLogin =
+async function(){
 
   try{
 
     const result =
-      await signInWithPopup(auth, provider);
+      await signInWithPopup(
+        auth,
+        provider
+      );
 
-    currentUser = result.user;
+    currentUser =
+      result.user;
 
     alert(
       "Google account connected successfully!"
@@ -348,7 +596,8 @@ window.googleLogin = async function(){
    LOGOUT
 ========================= */
 
-window.logout = async function(){
+window.logout =
+async function(){
 
   await signOut(auth);
 
@@ -382,45 +631,58 @@ onAuthStateChanged(
 function updateUserUI(){
 
   const info =
-    document.getElementById("userInfo");
+    document.getElementById(
+      "userInfo"
+    );
 
   const admin =
-    document.getElementById("adminPanel");
+    document.getElementById(
+      "adminPanel"
+    );
 
   const homeLoginBtn =
-    document.getElementById("homeLoginBtn");
+    document.getElementById(
+      "homeLoginBtn"
+    );
 
   const creatorLoginBtn =
-    document.getElementById("creatorLoginBtn");
+    document.getElementById(
+      "creatorLoginBtn"
+    );
 
   const homeUserInfo =
-    document.getElementById("homeUserInfo");
+    document.getElementById(
+      "homeUserInfo"
+    );
 
 
   if(!currentUser){
 
-    if(info){
+    if(info)
       info.innerHTML =
         "Not connected.";
-    }
 
-    if(admin){
-      admin.classList.add("hidden");
-    }
 
-    if(homeLoginBtn){
+    if(admin)
+      admin.classList.add(
+        "hidden"
+      );
+
+
+    if(homeLoginBtn)
       homeLoginBtn.style.display =
         "inline-block";
-    }
 
-    if(creatorLoginBtn){
+
+    if(creatorLoginBtn)
       creatorLoginBtn.style.display =
         "inline-block";
-    }
 
-    if(homeUserInfo){
-      homeUserInfo.innerHTML = "";
-    }
+
+    if(homeUserInfo)
+      homeUserInfo.innerHTML =
+        "";
+
 
     return;
 
@@ -435,29 +697,27 @@ function updateUserUI(){
 
     info.innerHTML =
       "Connected as: <b>" +
-      email +
+      escapeHtml(email) +
       "</b>";
 
   }
 
 
-  if(homeLoginBtn){
+  if(homeLoginBtn)
     homeLoginBtn.style.display =
       "none";
-  }
 
 
-  if(creatorLoginBtn){
+  if(creatorLoginBtn)
     creatorLoginBtn.style.display =
       "none";
-  }
 
 
   if(homeUserInfo){
 
     homeUserInfo.innerHTML =
       "Connected as: <b>" +
-      email +
+      escapeHtml(email) +
       "</b>";
 
   }
@@ -491,30 +751,40 @@ function updateUserUI(){
    NAVIGATION
 ========================= */
 
-window.showHome = function(){
+window.showHome =
+function(){
 
   document
     .getElementById("home")
-    .classList.remove("hidden");
+    .classList.remove(
+      "hidden"
+    );
 
   document
     .getElementById("creator")
-    .classList.add("hidden");
+    .classList.add(
+      "hidden"
+    );
 
   loadPosts();
 
 };
 
 
-window.showCreator = function(){
+window.showCreator =
+function(){
 
   document
     .getElementById("home")
-    .classList.add("hidden");
+    .classList.add(
+      "hidden"
+    );
 
   document
     .getElementById("creator")
-    .classList.remove("hidden");
+    .classList.remove(
+      "hidden"
+    );
 
   updateUserUI();
 
@@ -522,7 +792,7 @@ window.showCreator = function(){
 
 
 /* =========================
-   LOAD WEBSITE SETTINGS
+   LOAD SETTINGS
 ========================= */
 
 async function loadSettings(){
@@ -574,6 +844,8 @@ async function loadSettings(){
 
     updateSocialLinks(data);
 
+    updateLogo(data.logoUrl || "");
+
   }catch(error){
 
     console.error(error);
@@ -584,7 +856,58 @@ async function loadSettings(){
 
 
 /* =========================
-   SAVE SETTINGS
+   LOGO PREVIEW
+========================= */
+
+document
+  .getElementById("logoFile")
+  .addEventListener(
+    "change",
+    function(){
+
+      const file =
+        this.files[0];
+
+      const preview =
+        document.getElementById(
+          "logoPreview"
+        );
+
+
+      if(!file){
+
+        preview.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(e){
+
+          preview.src =
+            e.target.result;
+
+          preview.style.display =
+            "block";
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+/* =========================
+   SAVE SETTINGS + LOGO
 ========================= */
 
 window.saveSettings =
@@ -599,79 +922,289 @@ async function(){
   }
 
 
-  const siteName =
-    document
-      .getElementById(
-        "siteName"
-      )
-      .value;
+  const status =
+    document.getElementById(
+      "settingsStatus"
+    );
 
 
-  const facebook =
-    document
-      .getElementById(
-        "facebook"
-      )
-      .value;
+  status.innerText =
+    "Saving settings...";
 
 
-  const instagram =
-    document
-      .getElementById(
-        "instagram"
-      )
-      .value;
+  try{
+
+    const siteName =
+      document
+        .getElementById(
+          "siteName"
+        )
+        .value;
 
 
-  const youtube =
-    document
-      .getElementById(
-        "youtube"
-      )
-      .value;
+    const facebook =
+      document
+        .getElementById(
+          "facebook"
+        )
+        .value;
 
 
-  await setDoc(
+    const instagram =
+      document
+        .getElementById(
+          "instagram"
+        )
+        .value;
 
-    doc(
-      db,
-      "settings",
-      "website"
-    ),
 
-    {
-      siteName,
-      facebook,
-      instagram,
-      youtube,
-      updatedAt:
-        Date.now()
-    },
+    const youtube =
+      document
+        .getElementById(
+          "youtube"
+        )
+        .value;
 
-    {
-      merge:true
+
+    const logoFile =
+      document
+        .getElementById(
+          "logoFile"
+        )
+        .files[0];
+
+
+    let logoUrl =
+      "";
+
+
+    let logoStoragePath =
+      "";
+
+
+    if(logoFile){
+
+      status.innerText =
+        "Uploading logo...";
+
+
+      const safeName =
+        logoFile.name.replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+
+      logoStoragePath =
+        "website/logo_" +
+        Date.now() +
+        "_" +
+        safeName;
+
+
+      const logoRef =
+        ref(
+          storage,
+          logoStoragePath
+        );
+
+
+      const uploadTask =
+        uploadBytesResumable(
+          logoRef,
+          logoFile
+        );
+
+
+      await new Promise(
+        (resolve,reject)=>{
+
+          uploadTask.on(
+
+            "state_changed",
+
+            (snapshot)=>{
+
+              const progress =
+                Math.round(
+                  (
+                    snapshot.bytesTransferred /
+                    snapshot.totalBytes
+                  ) * 100
+                );
+
+              status.innerText =
+                "Uploading logo... " +
+                progress +
+                "%";
+
+            },
+
+            reject,
+
+            async ()=>{
+
+              logoUrl =
+                await getDownloadURL(
+                  uploadTask.snapshot.ref
+                );
+
+              resolve();
+
+            }
+
+          );
+
+        }
+      );
+
     }
 
-  );
+
+    const existingSnap =
+      await getDoc(
+        doc(
+          db,
+          "settings",
+          "website"
+        )
+      );
 
 
-  document.getElementById(
-    "settingsStatus"
-  ).innerHTML =
-    '<span class="success">' +
-    'Settings saved successfully.' +
-    '</span>';
+    const existingData =
+      existingSnap.exists()
+      ? existingSnap.data()
+      : {};
 
 
-  updateSocialLinks({
+    await setDoc(
 
-    facebook,
-    instagram,
-    youtube
+      doc(
+        db,
+        "settings",
+        "website"
+      ),
 
-  });
+      {
+
+        siteName,
+
+        facebook,
+
+        instagram,
+
+        youtube,
+
+        logoUrl:
+          logoUrl ||
+          existingData.logoUrl ||
+          "",
+
+        logoStoragePath:
+          logoStoragePath ||
+          existingData.logoStoragePath ||
+          "",
+
+        updatedAt:
+          Date.now()
+
+      },
+
+      {
+        merge:true
+      }
+
+    );
+
+
+    status.innerHTML =
+      '<span class="success">' +
+      'Settings saved successfully.' +
+      '</span>';
+
+
+    updateSocialLinks({
+
+      facebook,
+      instagram,
+      youtube
+
+    });
+
+
+    updateLogo(
+      logoUrl ||
+      existingData.logoUrl ||
+      ""
+    );
+
+
+    document.getElementById(
+      "logoFile"
+    ).value = "";
+
+
+    document.getElementById(
+      "logoPreview"
+    ).style.display =
+      "none";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    status.innerHTML =
+      '<span class="danger">' +
+      'Save failed: ' +
+      escapeHtml(
+        error.message
+      ) +
+      '</span>';
+
+  }
 
 };
+
+
+/* =========================
+   UPDATE LOGO
+========================= */
+
+function updateLogo(url){
+
+  const image =
+    document.getElementById(
+      "logoImage"
+    );
+
+  const text =
+    document.getElementById(
+      "logoText"
+    );
+
+
+  if(url){
+
+    image.src = url;
+
+    image.style.display =
+      "block";
+
+    text.textContent =
+      "Kitsune AniVerse";
+
+  }else{
+
+    image.style.display =
+      "none";
+
+    text.textContent =
+      "🦊 Kitsune AniVerse";
+
+  }
+
+}
 
 
 /* =========================
@@ -692,8 +1225,11 @@ function updateSocialLinks(data){
 
     html +=
       `<a
-        href="${escapeAttr(data.facebook)}"
-        target="_blank">
+        href="${escapeAttr(
+          data.facebook
+        )}"
+        target="_blank"
+        rel="noopener">
         Facebook
       </a>`;
 
@@ -704,8 +1240,11 @@ function updateSocialLinks(data){
 
     html +=
       `<a
-        href="${escapeAttr(data.instagram)}"
-        target="_blank">
+        href="${escapeAttr(
+          data.instagram
+        )}"
+        target="_blank"
+        rel="noopener">
         Instagram
       </a>`;
 
@@ -716,15 +1255,19 @@ function updateSocialLinks(data){
 
     html +=
       `<a
-        href="${escapeAttr(data.youtube)}"
-        target="_blank">
+        href="${escapeAttr(
+          data.youtube
+        )}"
+        target="_blank"
+        rel="noopener">
         YouTube
       </a>`;
 
   }
 
 
-  box.innerHTML = html;
+  box.innerHTML =
+    html;
 
 }
 
@@ -737,14 +1280,16 @@ function isAdmin(){
 
   return currentUser &&
     currentUser.email &&
-    currentUser.email.toLowerCase()
-    === ADMIN_EMAIL.toLowerCase();
+    currentUser.email
+      .toLowerCase()
+      ===
+      ADMIN_EMAIL.toLowerCase();
 
 }
 
 
 /* =========================
-   UPLOAD POST
+   UPLOAD POST / MANGA
 ========================= */
 
 window.uploadPost =
@@ -790,7 +1335,7 @@ async function(){
   if(!title){
 
     alert(
-      "Enter a post title."
+      "Enter a post or manga title."
     );
 
     return;
@@ -801,7 +1346,7 @@ async function(){
   if(!file){
 
     alert(
-      "Choose an image or video."
+      "Choose an image, video or PDF."
     );
 
     return;
@@ -815,8 +1360,35 @@ async function(){
     );
 
 
+  const progressArea =
+    document.getElementById(
+      "uploadProgressArea"
+    );
+
+
+  const progressBar =
+    document.getElementById(
+      "uploadProgressBar"
+    );
+
+
+  const progressText =
+    document.getElementById(
+      "uploadProgressText"
+    );
+
+
   status.innerText =
-    "Uploading... 0%";
+    "Preparing upload...";
+
+
+  progressArea.classList.remove(
+    "hidden"
+  );
+
+
+  progressBar.style.width =
+    "0%";
 
 
   try{
@@ -828,13 +1400,17 @@ async function(){
       );
 
 
+    const storagePath =
+      "posts/" +
+      Date.now() +
+      "_" +
+      safeName;
+
+
     const storageRef =
       ref(
         storage,
-        "posts/" +
-        Date.now() +
-        "_" +
-        safeName
+        storagePath
       );
 
 
@@ -862,10 +1438,19 @@ async function(){
           );
 
 
-        status.innerText =
+        progressBar.style.width =
+          progress + "%";
+
+
+        progressText.innerText =
           "Uploading... " +
           progress +
           "%";
+
+
+        status.innerText =
+          "Uploading " +
+          file.name;
 
       },
 
@@ -878,6 +1463,10 @@ async function(){
           "Upload failed: " +
           error.message;
 
+        progressArea.classList.add(
+          "hidden"
+        );
+
       },
 
 
@@ -889,10 +1478,32 @@ async function(){
           );
 
 
-        const type =
-          file.type.startsWith("video")
-          ? "video"
-          : "image";
+        let type =
+          "image";
+
+
+        if(
+          file.type ===
+          "application/pdf"
+          ||
+          file.name
+            .toLowerCase()
+            .endsWith(".pdf")
+        ){
+
+          type =
+            "pdf";
+
+        }else if(
+          file.type.startsWith(
+            "video/"
+          )
+        ){
+
+          type =
+            "video";
+
+        }
 
 
         await addDoc(
@@ -915,6 +1526,11 @@ async function(){
             fileName:
               file.name,
 
+            storagePath,
+
+            fileSize:
+              file.size,
+
             createdAt:
               Date.now(),
 
@@ -928,7 +1544,7 @@ async function(){
 
         status.innerHTML =
           '<span class="success">' +
-          'Post published successfully!' +
+          'Published successfully!' +
           '</span>';
 
 
@@ -947,9 +1563,29 @@ async function(){
         ).value = "";
 
 
+        progressText.innerText =
+          "Upload complete: 100%";
+
+
+        progressBar.style.width =
+          "100%";
+
+
         loadPosts();
 
         loadAdminPosts();
+
+
+        setTimeout(
+          ()=>{
+
+            progressArea.classList.add(
+              "hidden"
+            );
+
+          },
+          1500
+        );
 
       }
 
@@ -962,6 +1598,10 @@ async function(){
     status.innerText =
       "Upload failed: " +
       error.message;
+
+    progressArea.classList.add(
+      "hidden"
+    );
 
   }
 
@@ -1027,9 +1667,71 @@ async function loadPosts(){
           item.data();
 
 
+        let media = "";
+
+
+        if(p.type === "pdf"){
+
+          media = `
+
+            <div class="card">
+
+              <p>
+                📕 Manga PDF
+              </p>
+
+              <button
+                onclick="window.open(
+                  '${escapeAttr(p.url)}',
+                  '_blank'
+                )">
+
+                Read Manga PDF
+
+              </button>
+
+            </div>
+
+          `;
+
+        }else if(
+          p.type === "video"
+        ){
+
+          media = `
+
+            <video
+              controls
+              preload="metadata"
+              src="${escapeAttr(
+                p.url
+              )}">
+            </video>
+
+          `;
+
+        }else{
+
+          media = `
+
+            <img
+              loading="lazy"
+              src="${escapeAttr(
+                p.url
+              )}"
+              alt="${escapeAttr(
+                p.title
+              )}">
+
+          `;
+
+        }
+
+
         html += `
 
-          <article class="post">
+          <article
+            class="post">
 
             <h2>
               ${escapeHtml(
@@ -1043,30 +1745,7 @@ async function loadPosts(){
               )}
             </p>
 
-            ${
-              p.type === "video"
-
-              ?
-
-              `<video
-                controls
-                preload="metadata"
-                src="${escapeAttr(
-                  p.url
-                )}">
-              </video>`
-
-              :
-
-              `<img
-                loading="lazy"
-                src="${escapeAttr(
-                  p.url
-                )}"
-                alt="${escapeAttr(
-                  p.title
-                )}">`
-            }
+            ${media}
 
             <div class="small">
 
@@ -1096,7 +1775,9 @@ async function loadPosts(){
 
     box.innerHTML =
       `<div class="card">
-        <p>Could not load posts.</p>
+        <p>
+          Could not load posts.
+        </p>
       </div>`;
 
   }
@@ -1120,89 +1801,262 @@ async function loadAdminPosts(){
     );
 
 
-  const snapshot =
-    await getDocs(
+  try{
 
-      query(
+    const snapshot =
+      await getDocs(
 
-        collection(
-          db,
-          "posts"
-        ),
+        query(
 
-        orderBy(
-          "createdAt",
-          "desc"
+          collection(
+            db,
+            "posts"
+          ),
+
+          orderBy(
+            "createdAt",
+            "desc"
+          )
+
         )
 
-      )
+      );
 
+
+    if(snapshot.empty){
+
+      box.innerHTML =
+        "<p class='small'>" +
+        "No posts." +
+        "</p>";
+
+      return;
+
+    }
+
+
+    let html = "";
+
+
+    snapshot.forEach(
+      (item)=>{
+
+        const p =
+          item.data();
+
+
+        html += `
+
+          <div
+            class="post">
+
+            <b>
+              ${escapeHtml(
+                p.title
+              )}
+            </b>
+
+            <div class="small">
+
+              ${escapeHtml(
+                p.fileName || ""
+              )}
+
+            </div>
+
+
+            <div class="small">
+
+              Type:
+              ${escapeHtml(
+                p.type || "image"
+              )}
+
+            </div>
+
+
+            <br>
+
+
+            <button
+              onclick="editPost(
+                '${item.id}'
+              )">
+
+              Edit
+
+            </button>
+
+
+            <button
+              class="danger"
+              onclick="deletePost(
+                '${item.id}'
+              )">
+
+              Delete
+
+            </button>
+
+
+            <div
+              id="edit-${item.id}"
+              class="editBox hidden">
+
+              <input
+                id="edit-title-${item.id}"
+                value="${escapeAttr(
+                  p.title || ""
+                )}"
+                placeholder="Title">
+
+
+              <textarea
+                id="edit-description-${item.id}"
+                placeholder="Description">${escapeHtml(
+                  p.description || ""
+                )}</textarea>
+
+
+              <button
+                onclick="savePostEdit(
+                  '${item.id}'
+                )">
+
+                Save Edit
+
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
     );
 
 
-  if(snapshot.empty){
+    box.innerHTML =
+      html;
+
+  }catch(error){
+
+    console.error(error);
 
     box.innerHTML =
-      "<p class='small'>No posts.</p>";
+      "<p>Could not load admin posts.</p>";
+
+  }
+
+}
+
+
+/* =========================
+   EDIT POST
+========================= */
+
+window.editPost =
+function(id){
+
+  const box =
+    document.getElementById(
+      "edit-" + id
+    );
+
+
+  if(box)
+    box.classList.toggle(
+      "hidden"
+    );
+
+};
+
+
+/* =========================
+   SAVE POST EDIT
+========================= */
+
+window.savePostEdit =
+async function(id){
+
+  if(!isAdmin()){
+
+    alert(
+      "Admin only."
+    );
 
     return;
 
   }
 
 
-  let html = "";
+  const title =
+    document.getElementById(
+      "edit-title-" + id
+    ).value.trim();
 
 
-  snapshot.forEach(
-    (item)=>{
-
-      const p =
-        item.data();
-
-
-      html += `
-
-        <div class="post">
-
-          <b>
-            ${escapeHtml(
-              p.title
-            )}
-          </b>
-
-          <div class="small">
-            ${escapeHtml(
-              p.fileName || ""
-            )}
-          </div>
-
-          <br>
-
-          <button
-            class="danger"
-            onclick="deletePost(
-              '${item.id}',
-              '${escapeAttr(
-                p.url
-              )}'
-            )">
-
-            Delete
-
-          </button>
-
-        </div>
-
-      `;
-
-    }
-  );
+  const description =
+    document.getElementById(
+      "edit-description-" + id
+    ).value.trim();
 
 
-  box.innerHTML =
-    html;
+  if(!title){
 
-}
+    alert(
+      "Title cannot be empty."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await updateDoc(
+
+      doc(
+        db,
+        "posts",
+        id
+      ),
+
+      {
+
+        title,
+
+        description,
+
+        updatedAt:
+          Date.now()
+
+      }
+
+    );
+
+
+    alert(
+      "Post updated successfully!"
+    );
+
+
+    loadPosts();
+
+    loadAdminPosts();
+
+  }catch(error){
+
+    alert(
+      "Edit failed: " +
+      error.message
+    );
+
+  }
+
+};
 
 
 /* =========================
@@ -1210,10 +2064,7 @@ async function loadAdminPosts(){
 ========================= */
 
 window.deletePost =
-async function(
-  id,
-  url
-){
+async function(id){
 
   if(!isAdmin()){
 
@@ -1236,34 +2087,63 @@ async function(
 
   try{
 
-    await deleteDoc(
+    const postRef =
       doc(
         db,
         "posts",
         id
-      )
+      );
+
+
+    const snap =
+      await getDoc(
+        postRef
+      );
+
+
+    if(
+      !snap.exists()
+    ){
+
+      alert(
+        "Post not found."
+      );
+
+      return;
+
+    }
+
+
+    const data =
+      snap.data();
+
+
+    await deleteDoc(
+      postRef
     );
 
 
-    try{
+    if(
+      data.storagePath
+    ){
 
-      const fileRef =
-        ref(
-          storage,
-          url
+      try{
+
+        await deleteObject(
+          ref(
+            storage,
+            data.storagePath
+          )
         );
 
+      }catch(storageError){
 
-      await deleteObject(
-        fileRef
-      );
+        console.log(
+          "Storage file could not be deleted:",
+          storageError
+        );
 
-    }catch(e){
-
-      console.log(
-        "Storage file could not be deleted:",
-        e
-      );
+      }
 
     }
 
@@ -1271,6 +2151,11 @@ async function(
     loadPosts();
 
     loadAdminPosts();
+
+
+    alert(
+      "Post deleted successfully!"
+    );
 
 
   }catch(error){
