@@ -1,95 +1,1055 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kitsune AniVerse</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
 <style>
-:root{--bg:#090611;--panel:#151020;--panel2:#1e142b;--line:#38264a;--purple:#a15ef0;--crimson:#c81d4a;--gold:#e8b64c;--text:#f6eff8;--muted:#b3a3bd;--danger:#ef667d;--ok:#62d39a;--display:'Cinzel Decorative',serif;--body:'Zen Kaku Gothic New',sans-serif;--mono:'Space Mono',monospace}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse 80% 55% at 50% -10%,#3d1768 0,transparent 65%),radial-gradient(ellipse 60% 50% at 100% 100%,#541128 0,transparent 65%),var(--bg);color:var(--text);font-family:var(--body)}a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.wrap{max-width:1220px;margin:auto;padding:0 24px}
-header{position:sticky;top:0;z-index:20;background:rgba(9,6,17,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.nav{height:74px;display:flex;align-items:center;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700}.logo{width:42px;height:42px;border-radius:12px;object-fit:cover;background:linear-gradient(135deg,var(--gold),var(--crimson));border:1px solid #ffffff22}.navlinks{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.navlinks a,.navlinks button{padding:9px 13px;border:1px solid transparent;border-radius:8px;background:none;color:var(--muted)}.navlinks a:hover,.navlinks button:hover{color:#fff;border-color:var(--line);background:var(--panel)}
-main{padding:54px 0 80px}.hero{padding:44px 0 66px}.eyebrow{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.15em;text-transform:uppercase}.hero h1{font-family:var(--display);font-size:clamp(38px,7vw,82px);line-height:1.02;margin:14px 0}.hero h1 span{color:var(--crimson)}.hero p{max-width:720px;color:var(--muted);font-size:16px}.btn{border:1px solid var(--line);background:var(--panel);color:#fff;border-radius:8px;padding:11px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{border-color:var(--purple)}.btn-primary{border-color:#9a52ed;background:linear-gradient(135deg,#6f35a9,#8b173b)}.btn-danger{border-color:#6e1e32;color:#ff9caf}.btn-small{padding:7px 10px;font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}.card{background:rgba(21,16,32,.9);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-2px);border-color:var(--purple)}.cover{width:100%;aspect-ratio:3/4;object-fit:cover;background:linear-gradient(135deg,#26163a,#4a1230)}.card-body{padding:16px}.card h3{margin:0 0 6px;font-family:var(--display);font-size:18px}.muted{color:var(--muted)}.meta{font-family:var(--mono);font-size:10px;color:#8f7b9e;letter-spacing:.08em}
-.panel{border:1px solid var(--line);background:rgba(21,16,32,.86);border-radius:14px;padding:24px;margin:24px 0}.panel h2,.panel h3{font-family:var(--display)}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}.seriesHero{display:grid;grid-template-columns:220px 1fr;gap:28px}.seriesCover{width:220px;aspect-ratio:3/4;object-fit:cover;border-radius:10px;background:#241531}.chapter{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.chapter:last-child{border-bottom:0}.chapter strong{display:block}.chapter .num{color:var(--gold);font-family:var(--mono);font-size:12px}
-.reader{text-align:center}.reader img,.reader video{max-width:100%;height:auto;display:block;margin:18px auto;background:#000;border-radius:6px}.reader img{max-height:none}.reader video{width:min(100%,1000px)}
-footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted)}.socials{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.socials a{border:1px solid var(--line);padding:8px 12px;border-radius:8px}
-.authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 20%,#42166b,#090611 65%);display:flex;align-items:center;justify-content:center;padding:20px}.authBox{width:min(520px,100%);background:#120c1b;border:1px solid var(--line);border-radius:18px;padding:32px;text-align:center;box-shadow:0 20px 80px #0009}.authBox .bigLogo{width:78px;height:78px;border-radius:20px;object-fit:cover;margin:auto}.google{width:100%;padding:13px;border-radius:10px;border:1px solid #fff2;background:#fff;color:#111;font-weight:700;margin-top:18px}.userChip{font-size:11px;color:var(--muted);max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted)}input,textarea,select{width:100%;border:1px solid var(--line);background:#0d0914;color:#fff;border-radius:8px;padding:11px 12px;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--purple)}textarea{min-height:100px;resize:vertical}.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.adminItem{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);padding:12px;border-radius:9px;background:#100b18;margin:8px 0}.actions{display:flex;gap:6px;flex-wrap:wrap}.status{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:13px}.ok{background:#123b29;color:#9af0c4}.err{background:#401523;color:#ffb0bd}.warn{background:#44330e;color:#ffe18b}.progress{height:8px;background:#090611;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--crimson))}.hint{font-size:11px;color:#8f7b9e}.empty{text-align:center;padding:50px;color:var(--muted)}
-@media(max-width:800px){.seriesHero,.adminGrid,.formgrid{grid-template-columns:1fr}.seriesCover{width:180px}.nav{height:auto;padding:12px 0}.navlinks{margin-left:0}.hero{padding-top:25px}}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#0b0712;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:18px 30px;
+  background:#130c1d;
+  border-bottom:1px solid #3b2850;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  color:#e8b64c;
+}
+nav a{
+  color:#ddd;
+  margin-left:18px;
+  text-decoration:none;
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 20px;
+}
+.hero{
+  text-align:center;
+  padding:70px 20px;
+}
+.hero h1{
+  font-size:55px;
+  margin:10px 0;
+  color:#c78cff;
+}
+.hero p{color:#aaa}
+button{
+  border:0;
+  padding:12px 20px;
+  border-radius:6px;
+  background:#8c42d8;
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
+}
+button:hover{opacity:.85}
+.card{
+  background:#171020;
+  border:1px solid #382544;
+  border-radius:10px;
+  padding:20px;
+  margin-bottom:20px;
+}
+input,textarea,select{
+  width:100%;
+  padding:12px;
+  margin:7px 0 15px;
+  background:#0e0915;
+  color:#fff;
+  border:1px solid #443052;
+  border-radius:5px;
+}
+label{
+  color:#c9b7d8;
+  font-size:13px;
+}
+.hidden{display:none!important}
+.social a{
+  display:inline-block;
+  margin:6px;
+  padding:10px 15px;
+  border:1px solid #49335a;
+  border-radius:6px;
+  color:#fff;
+  text-decoration:none;
+}
+.post{
+  border:1px solid #35233f;
+  background:#140d1c;
+  padding:18px;
+  border-radius:8px;
+  margin-bottom:18px;
+}
+.post img,.post video{
+  max-width:100%;
+  border-radius:6px;
+  margin-top:10px;
+}
+.small{color:#888;font-size:12px}
+.danger{background:#a52245}
+.success{color:#70e09b}
 </style>
 </head>
+
 <body>
-<div id="authGate" class="authGate hidden"><div class="authBox"><img id="authLogo" class="bigLogo" alt="Logo"><div class="eyebrow" style="margin-top:18px">WELCOME TO</div><h1 style="font-family:var(--display);font-size:30px;margin:10px 0">Kitsune AniVerse</h1><p class="muted">Connect your Google account to enter the website.</p><button class="google" onclick="signInGoogle()">Continue with Google</button><div id="authError" class="status err hidden"></div></div></div>
-<div id="app" class="hidden">
-<header><div class="wrap nav"><a href="#/" class="brand"><img id="navLogo" class="logo"><span id="siteName">Kitsune AniVerse</span></a><nav class="navlinks"><a href="#/">Home</a><a href="#/library">Library</a><a id="adminLink" class="hidden" href="#/admin">Creator Panel</a><span id="userEmail" class="userChip"></span><button onclick="signOutUser()">Sign out</button></nav></div></header>
-<main><div class="wrap" id="view"></div></main>
-<footer><div class="wrap"><strong id="footerName">Kitsune AniVerse</strong><div class="muted">Original manga, art & content portal.</div><div class="socials" id="socials"></div></div></footer>
-</div>
-<script>
-/* ============================================================
-   ONE-TIME FIREBASE SETUP
-   1) Create a Firebase project.
-   2) Enable Authentication > Google.
-   3) Create Firestore Database.
-   4) Create Storage.
-   5) Register a Web App and paste its config below.
-   6) Put your Google email in ADMIN_EMAILS.
-   ============================================================ */
-const firebaseConfig={
-  apiKey:"PASTE_FIREBASE_API_KEY",
-  authDomain:"PASTE_PROJECT.firebaseapp.com",
-  projectId:"PASTE_PROJECT_ID",
-  storageBucket:"PASTE_PROJECT.firebasestorage.app",
-  messagingSenderId:"PASTE_SENDER_ID",
-  appId:"PASTE_APP_ID"
+
+<header>
+  <div class="logo">🦊 Kitsune AniVerse</div>
+
+  <nav>
+    <a href="#" onclick="showHome()">Home</a>
+    <a href="#" onclick="showCreator()">Creator Panel</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<section id="home">
+  <div class="hero">
+    <h1>KITSUNE ANIVERSE</h1>
+    <p>Original manga, art, stories & videos.</p>
+
+    <div id="socialLinks" class="social"></div>
+
+    <button onclick="googleLogin()">Connect Google Account</button>
+  </div>
+
+  <div id="posts"></div>
+</section>
+
+
+<section id="creator" class="hidden">
+
+  <div class="card">
+
+    <h2>Creator Panel</h2>
+
+    <p id="userInfo" class="small"></p>
+
+    <button onclick="googleLogin()">Connect / Login with Google</button>
+    <button onclick="logout()">Logout</button>
+
+  </div>
+
+
+  <div id="adminPanel" class="hidden">
+
+    <div class="card">
+
+      <h2>Website Settings</h2>
+
+      <label>Website Name</label>
+      <input id="siteName" placeholder="Kitsune AniVerse">
+
+      <label>Facebook URL</label>
+      <input id="facebook" placeholder="https://facebook.com/...">
+
+      <label>Instagram URL</label>
+      <input id="instagram" placeholder="https://instagram.com/...">
+
+      <label>YouTube URL</label>
+      <input id="youtube" placeholder="https://youtube.com/...">
+
+      <label>Website Logo</label>
+      <input type="file" id="logoFile" accept="image/*">
+
+      <button onclick="saveSettings()">Save Website Settings</button>
+
+      <p id="settingsStatus"></p>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>Create New Post</h2>
+
+      <label>Post Title</label>
+      <input id="postTitle" placeholder="Post title">
+
+      <label>Description</label>
+      <textarea id="postDescription" placeholder="Write something..."></textarea>
+
+      <label>Upload Image / Video</label>
+      <input type="file" id="postFile" accept="image/*,video/*">
+
+      <button onclick="uploadPost()">Publish Post</button>
+
+      <p id="uploadStatus"></p>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>Manage Posts</h2>
+      <div id="adminPosts"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- Firebase -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  setDoc,
+  getDoc,
+  query,
+  orderBy
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSOp-P6Wec72xmjE581dOVmheJ-ytQf2w",
+  authDomain: "kitsune-aniverse.firebaseapp.com",
+  projectId: "kitsune-aniverse",
+  storageBucket: "kitsune-aniverse.firebasestorage.app",
+  messagingSenderId: "73724605125",
+  appId: "1:73724605125:web:8f6a0577ada949a26f36ac",
+  measurementId: "G-5RMPCXW8GF"
 };
-const ADMIN_EMAILS=["YOUR_GMAIL@gmail.com"];
-const MAX_UPLOAD_BYTES=200*1024*1024;
-let appReady=false,db=null,storage=null,auth=null,currentUser=null,settings={siteName:"Kitsune AniVerse",tagline:"Tales spun in ink & foxfire.",description:"Original manga, art & content portal",logoUrl:"",facebook:"",instagram:"",youtube:""};
-function configured(){return !firebaseConfig.apiKey.startsWith('PASTE_')&&!firebaseConfig.projectId.startsWith('PASTE_')&&!ADMIN_EMAILS[0].includes('YOUR_GMAIL')}
-function initFirebase(){if(!configured())return false;firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();storage=firebase.storage();auth.onAuthStateChanged(async u=>{currentUser=u;if(u){await loadSettings();document.getElementById('authGate').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('userEmail').textContent=u.email||'';document.getElementById('adminLink').classList.toggle('hidden',!isAdmin());renderRoute()}else{document.getElementById('app').classList.add('hidden');document.getElementById('authGate').classList.remove('hidden')}});appReady=true;return true}
-function isAdmin(){return !!currentUser&&ADMIN_EMAILS.map(x=>x.toLowerCase()).includes((currentUser.email||'').toLowerCase())}
-async function signInGoogle(){try{const p=new firebase.auth.GoogleAuthProvider();await auth.signInWithPopup(p)}catch(e){document.getElementById('authError').textContent=e.message;document.getElementById('authError').classList.remove('hidden')}}
-async function signOutUser(){if(auth)await auth.signOut()}
-function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
-function fmtBytes(n){if(n<1024*1024)return Math.round(n/1024)+' KB';return (n/1024/1024).toFixed(1)+' MB'}
-async function loadSettings(){if(!db)return;const d=await db.collection('site').doc('settings').get();if(d.exists)settings={...settings,...d.data()};applySettings()}
-function applySettings(){document.title=settings.siteName||'Kitsune AniVerse';document.getElementById('siteName').textContent=settings.siteName;document.getElementById('footerName').textContent=settings.siteName;document.getElementById('authLogo').src=settings.logoUrl||placeholderLogo();document.getElementById('navLogo').src=settings.logoUrl||placeholderLogo();document.getElementById('socials').innerHTML=[['Facebook',settings.facebook],['Instagram',settings.instagram],['YouTube',settings.youtube]].filter(x=>x[1]).map(x=>`<a target="_blank" rel="noopener" href="${escapeHtml(x[1])}">${x[0]}</a>`).join('')}
-function placeholderLogo(){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" rx="24" fill="#8b173b"/><text x="60" y="72" text-anchor="middle" font-size="52" fill="#fff">狐</text></svg>')}
-async function getSeries(){const snap=await db.collection('series').orderBy('createdAt','desc').get();return snap.docs.map(d=>({id:d.id,...d.data()}))}
-async function getChapters(seriesId){const snap=await db.collection('series').doc(seriesId).collection('chapters').orderBy('number','asc').get();return snap.docs.map(d=>({id:d.id,...d.data()}))}
-async function getPages(seriesId,chapterId){const snap=await db.collection('series').doc(seriesId).collection('chapters').doc(chapterId).collection('pages').orderBy('order','asc').get();return snap.docs.map(d=>({id:d.id,...d.data()}))}
-function fileInput(id,accept){return `<input id="${id}" type="file" accept="${accept}"/>`}
-async function uploadFile(file,path,onProgress){if(!file)throw Error('Choose a file first.');if(file.size>MAX_UPLOAD_BYTES)throw Error('Maximum file size is 200 MB per file.');const ref=storage.ref(path);const task=ref.put(file,{contentType:file.type||undefined});return await new Promise((resolve,reject)=>{task.on('state_changed',s=>onProgress&&onProgress(s.bytesTransferred/s.totalBytes),e=>reject(e),async()=>resolve(await task.snapshot.ref.getDownloadURL()))})}
-function progressHtml(id){return `<div class="progress"><i id="${id}"></i></div><div id="${id}Text" class="hint"></div>`}
-async function renderHome(){const series=await getSeries();document.getElementById('view').innerHTML=`<section class="hero"><div class="eyebrow">${escapeHtml(settings.siteName)}</div><h1>${escapeHtml(settings.tagline).replace('ink','<span>ink</span>')}</h1><p>${escapeHtml(settings.description)}</p><a class="btn btn-primary" href="#/library">Enter the Library →</a></section><section class="panel"><div class="section-head"><div><div class="eyebrow">LIBRARY</div><h2 style="margin:6px 0">Original Series</h2></div><span class="meta">${series.length} SERIES</span></div>${series.length?`<div class="grid">${series.map(seriesCard).join('')}</div>`:`<div class="empty">No series published yet.</div>`}</section>`}
-function seriesCard(s){return `<a class="card" href="#/series/${s.id}">${s.coverUrl?`<img class="cover" src="${escapeHtml(s.coverUrl)}" alt="">`:`<div class="cover"></div>`}<div class="card-body"><div class="meta">${s.chapterCount||0} CHAPTERS</div><h3>${escapeHtml(s.title)}</h3><div class="muted">${escapeHtml((s.description||'').slice(0,120))}</div></div></a>`}
-async function renderLibrary(){const series=await getSeries();document.getElementById('view').innerHTML=`<section class="panel"><div class="section-head"><div><div class="eyebrow">LIBRARY</div><h1 style="font-family:var(--display);margin:7px 0">All Series</h1></div></div>${series.length?`<div class="grid">${series.map(seriesCard).join('')}</div>`:`<div class="empty">Nothing published yet.</div>`}</section>`}
-async function renderSeries(id){const d=await db.collection('series').doc(id).get();if(!d.exists){document.getElementById('view').innerHTML='<div class="empty">Series not found.</div>';return}const s={id:d.id,...d.data()},chs=await getChapters(id);document.getElementById('view').innerHTML=`<a href="#/library" class="muted">← Library</a><section class="panel"><div class="seriesHero">${s.coverUrl?`<img class="seriesCover" src="${escapeHtml(s.coverUrl)}">`:`<div class="seriesCover"></div>`}<div><div class="eyebrow">SERIES</div><h1 style="font-family:var(--display);font-size:34px">${escapeHtml(s.title)}</h1><p class="muted">${escapeHtml(s.description||'')}</p><div class="meta">${chs.length} CHAPTERS</div></div></div></section><section class="panel"><h2>Chapters</h2>${chs.length?chs.map(c=>`<a class="chapter" href="#/reader/${id}/${c.id}"><div><div class="num">CHAPTER ${c.number}</div><strong>${escapeHtml(c.title)}</strong></div><span class="meta">${c.pageCount||0} FILES</span></a>`).join(''):`<div class="empty">No chapters yet.</div>`}</section>`}
-async function renderReader(seriesId,chapterId){const sd=await db.collection('series').doc(seriesId).get(),cd=await db.collection('series').doc(seriesId).collection('chapters').doc(chapterId).get();if(!sd.exists||!cd.exists){document.getElementById('view').innerHTML='<div class="empty">Chapter not found.</div>';return}const s=sd.data(),c=cd.data(),pages=await getPages(seriesId,chapterId);document.getElementById('view').innerHTML=`<div class="reader"><a href="#/series/${seriesId}" class="muted">← ${escapeHtml(s.title)}</a><h1 style="font-family:var(--display)">Chapter ${c.number} — ${escapeHtml(c.title)}</h1>${pages.length?pages.map(p=>p.type&&p.type.startsWith('video')?`<video controls preload="metadata" src="${escapeHtml(p.url)}"></video>`:`<img loading="lazy" src="${escapeHtml(p.url)}" alt="">`).join(''):`<div class="empty">No pages/files uploaded.</div>`}</div>`}
-function adminGuard(){if(!isAdmin()){document.getElementById('view').innerHTML='<div class="empty"><h2>Creator access only</h2><p>Sign in with the Gmail account listed in ADMIN_EMAILS.</p></div>';return false}return true}
-async function renderAdmin(){if(!adminGuard())return;const series=await getSeries();document.getElementById('view').innerHTML=`<section><div class="section-head"><div><div class="eyebrow">ADMIN</div><h1 style="font-family:var(--display);margin:7px 0">Creator Panel</h1><div class="muted">Edit the website, social accounts, logo, series, chapters, images and videos.</div></div></div><div class="adminGrid"><div class="panel"><h3>Website settings</h3><div id="settingsStatus"></div><div class="formgrid"><div class="field"><label>Website name</label><input id="siteNameIn" value="${escapeHtml(settings.siteName)}"></div><div class="field"><label>Hero title</label><input id="taglineIn" value="${escapeHtml(settings.tagline)}"></div><div class="field full"><label>Description</label><textarea id="descIn">${escapeHtml(settings.description)}</textarea></div><div class="field"><label>Facebook URL</label><input id="fbIn" value="${escapeHtml(settings.facebook)}" placeholder="https://facebook.com/..."></div><div class="field"><label>Instagram URL</label><input id="igIn" value="${escapeHtml(settings.instagram)}" placeholder="https://instagram.com/..."></div><div class="field"><label>YouTube URL</label><input id="ytIn" value="${escapeHtml(settings.youtube)}" placeholder="https://youtube.com/..."></div><div class="field"><label>Logo image</label>${fileInput('logoIn','image/*')}<div class="hint">PNG/JPG/WebP recommended. Max 200 MB.</div></div></div><div class="actions" style="margin-top:14px"><button class="btn btn-primary" onclick="saveSiteSettings()">Save website settings</button></div></div><div class="panel"><h3>Add new series</h3><div id="seriesStatus"></div><div class="field"><label>Title</label><input id="newTitle" placeholder="Series title"></div><div class="field" style="margin-top:10px"><label>Description</label><textarea id="newDesc" placeholder="Short description"></textarea></div><div class="field" style="margin-top:10px"><label>Cover</label>${fileInput('newCover','image/*')}</div>${progressHtml('seriesProgress')}<button class="btn btn-primary" style="margin-top:14px" onclick="createSeries()">+ Add Series</button></div></div><section class="panel"><div class="section-head"><h3>Manage series</h3><span class="meta">${series.length} TOTAL</span></div>${series.length?series.map(s=>`<div class="adminItem"><div><strong>${escapeHtml(s.title)}</strong><div class="hint">${s.chapterCount||0} chapters</div></div><div class="actions"><button class="btn btn-small" onclick="editSeries('${s.id}')">Edit</button><button class="btn btn-small" onclick="manageChapters('${s.id}')">Chapters</button><button class="btn btn-small btn-danger" onclick="deleteSeries('${s.id}')">Delete</button></div></div>`).join(''):`<div class="empty">No series yet.</div>`}</section><div id="editor"></div></section>`}
-async function saveSiteSettings(){if(!adminGuard())return;const status=document.getElementById('settingsStatus');try{let logoUrl=settings.logoUrl;const f=document.getElementById('logoIn').files[0];if(f){logoUrl=await uploadFile(f,'site/logo-'+Date.now(),p=>{document.getElementById('settingsStatus').innerHTML=`<div class="status warn">Uploading logo… ${Math.round(p*100)}%</div>`})}settings={siteName:document.getElementById('siteNameIn').value.trim()||'Kitsune AniVerse',tagline:document.getElementById('taglineIn').value.trim()||'Tales spun in ink & foxfire.',description:document.getElementById('descIn').value.trim(),facebook:document.getElementById('fbIn').value.trim(),instagram:document.getElementById('igIn').value.trim(),youtube:document.getElementById('ytIn').value.trim(),logoUrl};await db.collection('site').doc('settings').set(settings,{merge:true});applySettings();status.innerHTML='<div class="status ok">Website settings saved.</div>'}catch(e){status.innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-async function createSeries(){const status=document.getElementById('seriesStatus');try{const title=document.getElementById('newTitle').value.trim();if(!title)throw Error('Enter a series title.');const f=document.getElementById('newCover').files[0];let coverUrl='';if(f)coverUrl=await uploadFile(f,'series/covers/'+uid()+'-'+f.name,p=>{document.getElementById('seriesProgress').style.width=Math.round(p*100)+'%';document.getElementById('seriesProgressText').textContent=`Uploading cover: ${Math.round(p*100)}%`});await db.collection('series').add({title,description:document.getElementById('newDesc').value.trim(),coverUrl,chapterCount:0,createdAt:firebase.firestore.FieldValue.serverTimestamp(),owner:currentUser.uid});status.innerHTML='<div class="status ok">Series added.</div>';setTimeout(renderAdmin,500)}catch(e){status.innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-async function editSeries(id){const d=await db.collection('series').doc(id).get(),s=d.data();const host=document.getElementById('editor');host.innerHTML=`<section class="panel"><h3>Edit: ${escapeHtml(s.title)}</h3><div id="editStatus"></div><div class="formgrid"><div class="field"><label>Title</label><input id="editTitle" value="${escapeHtml(s.title)}"></div><div class="field"><label>Replace cover</label>${fileInput('editCover','image/*')}</div><div class="field full"><label>Description</label><textarea id="editDesc">${escapeHtml(s.description||'')}</textarea></div></div>${progressHtml('editProgress')}<div class="actions" style="margin-top:14px"><button class="btn btn-primary" onclick="saveSeriesEdit('${id}')">Save changes</button><button class="btn" onclick="document.getElementById('editor').innerHTML=''">Cancel</button></div></section>`;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
-async function saveSeriesEdit(id){const st=document.getElementById('editStatus');try{const ref=db.collection('series').doc(id);const old=(await ref.get()).data();let coverUrl=old.coverUrl||'';const f=document.getElementById('editCover').files[0];if(f)coverUrl=await uploadFile(f,'series/covers/'+uid()+'-'+f.name,p=>document.getElementById('editProgress').style.width=Math.round(p*100)+'%');await ref.update({title:document.getElementById('editTitle').value.trim(),description:document.getElementById('editDesc').value.trim(),coverUrl});st.innerHTML='<div class="status ok">Updated.</div>';setTimeout(renderAdmin,500)}catch(e){st.innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-async function deleteSeries(id){if(!confirm('Delete this series and all chapters/pages?'))return;const ch=await getChapters(id);for(const c of ch){const pages=await getPages(id,c.id);for(const p of pages){try{await storage.refFromURL(p.url).delete()}catch(e){}}await db.collection('series').doc(id).collection('chapters').doc(c.id).delete()}await db.collection('series').doc(id).delete();renderAdmin()}
-async function manageChapters(seriesId){const d=await db.collection('series').doc(seriesId).get(),s=d.data(),chs=await getChapters(seriesId);const host=document.getElementById('editor');host.innerHTML=`<section class="panel"><h3>Chapters: ${escapeHtml(s.title)}</h3><div id="chapterStatus"></div><div class="formgrid"><div class="field"><label>Chapter number</label><input id="chNum" type="number" value="${chs.length+1}"></div><div class="field"><label>Chapter title</label><input id="chTitle" placeholder="Chapter title"></div><div class="field full"><label>Images / video files (up to 200 MB EACH)</label><input id="chapterFiles" type="file" accept="image/*,video/*" multiple><div class="hint">For manga pages choose multiple images. You can also upload a video.</div></div></div><div id="uploadProgress"></div><button class="btn btn-primary" style="margin-top:14px" onclick="createChapter('${seriesId}')">+ Publish Chapter</button><hr style="border:0;border-top:1px solid var(--line);margin:24px 0">${chs.length?chs.map(c=>`<div class="adminItem"><div><strong>#${c.number} — ${escapeHtml(c.title)}</strong><div class="hint">${c.pageCount||0} files</div></div><div class="actions"><button class="btn btn-small" onclick="editChapter('${seriesId}','${c.id}')">Edit</button><button class="btn btn-small btn-danger" onclick="deleteChapter('${seriesId}','${c.id}')">Delete</button></div></div>`).join(''):`<div class="empty">No chapters yet.</div>`}</section>`;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
-async function createChapter(seriesId){const st=document.getElementById('chapterStatus');try{const title=document.getElementById('chTitle').value.trim();const files=[...document.getElementById('chapterFiles').files];if(!title)throw Error('Enter a chapter title.');if(!files.length)throw Error('Choose at least one image or video.');for(const f of files)if(f.size>MAX_UPLOAD_BYTES)throw Error(`${f.name} is ${fmtBytes(f.size)}. Maximum is 200 MB per file.`);const number=Number(document.getElementById('chNum').value)||1;const chapterRef=db.collection('series').doc(seriesId).collection('chapters').doc();await chapterRef.set({number,title,pageCount:files.length,createdAt:firebase.firestore.FieldValue.serverTimestamp()});const box=document.getElementById('uploadProgress');for(let i=0;i<files.length;i++){const f=files[i];const row=document.createElement('div');row.className='status warn';row.textContent=`Uploading ${i+1}/${files.length}: ${f.name}`;box.appendChild(row);const url=await uploadFile(f,`series/${seriesId}/chapters/${chapterRef.id}/${uid()}-${f.name}`,p=>row.textContent=`Uploading ${i+1}/${files.length}: ${f.name} — ${Math.round(p*100)}%`);await chapterRef.collection('pages').add({url,type:f.type||'',name:f.name,size:f.size,order:i,createdAt:firebase.firestore.FieldValue.serverTimestamp()});row.className='status ok';row.textContent=`Uploaded: ${f.name}`;}await db.collection('series').doc(seriesId).update({chapterCount:files.length+(await getChapters(seriesId)).length-1});st.innerHTML='<div class="status ok">Chapter published successfully.</div>';setTimeout(()=>manageChapters(seriesId),700)}catch(e){st.innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-async function deleteChapter(seriesId,chapterId){if(!confirm('Delete this chapter and its uploaded files?'))return;const pages=await getPages(seriesId,chapterId);for(const p of pages){try{await storage.refFromURL(p.url).delete()}catch(e){}}await db.collection('series').doc(seriesId).collection('chapters').doc(chapterId).delete();await db.collection('series').doc(seriesId).update({chapterCount:(await getChapters(seriesId)).length});manageChapters(seriesId)}
-async function editChapter(seriesId,chapterId){const ref=db.collection('series').doc(seriesId).collection('chapters').doc(chapterId),d=await ref.get(),c=d.data(),pages=await getPages(seriesId,chapterId);const host=document.getElementById('editor');host.innerHTML=`<section class="panel"><h3>Edit Chapter ${c.number}</h3><div id="chapterEditStatus"></div><div class="formgrid"><div class="field"><label>Chapter number</label><input id="editChNum" type="number" value="${c.number}"></div><div class="field"><label>Chapter title</label><input id="editChTitle" value="${escapeHtml(c.title)}"></div><div class="field full"><label>Add more images/video files</label><input id="editChFiles" type="file" accept="image/*,video/*" multiple><div class="hint">Existing files stay. New files are appended.</div></div></div><div style="margin-top:14px"><strong>Existing files</strong>${pages.length?pages.map((p,i)=>`<div class="adminItem"><span class="hint">${i+1}. ${escapeHtml(p.name||'file')}</span><button class="btn btn-small btn-danger" onclick="deletePage('${seriesId}','${chapterId}','${p.id}')">Delete</button></div>`).join(''):`<div class="hint">No files.</div>`}</div><div id="chapterEditProgress"></div><div class="actions" style="margin-top:14px"><button class="btn btn-primary" onclick="saveChapterEdit('${seriesId}','${chapterId}')">Save chapter</button><button class="btn" onclick="manageChapters('${seriesId}')">Back</button></div></section>`;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
-async function saveChapterEdit(seriesId,chapterId){const st=document.getElementById('chapterEditStatus');try{const ref=db.collection('series').doc(seriesId).collection('chapters').doc(chapterId);await ref.update({number:Number(document.getElementById('editChNum').value)||1,title:document.getElementById('editChTitle').value.trim()||'Untitled'});const files=[...document.getElementById('editChFiles').files];for(let i=0;i<files.length;i++){const f=files[i];if(f.size>MAX_UPLOAD_BYTES)throw Error(`${f.name} is ${fmtBytes(f.size)}. Maximum is 200 MB per file.`);const row=document.createElement('div');row.className='status warn';row.textContent=`Uploading ${f.name} — 0%`;document.getElementById('chapterEditProgress').appendChild(row);const url=await uploadFile(f,`series/${seriesId}/chapters/${chapterId}/${uid()}-${f.name}`,p=>row.textContent=`Uploading ${f.name} — ${Math.round(p*100)}%`);const count=(await getPages(seriesId,chapterId)).length;await ref.collection('pages').add({url,type:f.type||'',name:f.name,size:f.size,order:count,createdAt:firebase.firestore.FieldValue.serverTimestamp()});row.className='status ok';row.textContent=`Uploaded: ${f.name}`}await ref.update({pageCount:(await getPages(seriesId,chapterId)).length});st.innerHTML='<div class="status ok">Chapter updated.</div>';setTimeout(()=>manageChapters(seriesId),600)}catch(e){st.innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-async function deletePage(seriesId,chapterId,pageId){if(!confirm('Delete this uploaded file?'))return;const ref=db.collection('series').doc(seriesId).collection('chapters').doc(chapterId).collection('pages').doc(pageId),d=await ref.get();if(d.exists){try{await storage.refFromURL(d.data().url).delete()}catch(e){}await ref.delete();await db.collection('series').doc(seriesId).collection('chapters').doc(chapterId).update({pageCount:(await getPages(seriesId,chapterId)).length})}editChapter(seriesId,chapterId)}
-function route(){return location.hash.slice(2).split('/').filter(Boolean)}
-async function renderRoute(){if(!appReady||!currentUser)return;try{const p=route();if(!p.length)return renderHome();if(p[0]==='library')return renderLibrary();if(p[0]==='series'&&p[1])return renderSeries(p[1]);if(p[0]==='reader'&&p[1]&&p[2])return renderReader(p[1],p[2]);if(p[0]==='admin')return renderAdmin();return renderHome()}catch(e){document.getElementById('view').innerHTML=`<div class="status err">${escapeHtml(e.message)}</div>`}}
-window.addEventListener('hashchange',renderRoute);
-if(!initFirebase()){document.getElementById('authGate').classList.remove('hidden');document.getElementById('authError').classList.remove('hidden');document.getElementById('authError').className='status warn';document.getElementById('authError').textContent='Firebase is not configured yet. Open this file and paste your Firebase Web App config plus your Gmail in ADMIN_EMAILS.';document.getElementById('authLogo').src=placeholderLogo()}
+
+
+/* =========================
+   INITIALIZE FIREBASE
+========================= */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+const storage = getStorage(app);
+
+const provider = new GoogleAuthProvider();
+
+
+/* =========================
+   ADMIN EMAIL
+========================= */
+
+const ADMIN_EMAIL = "admin@kitsuneaniverse.com";
+
+
+/* =========================
+   GLOBAL USER
+========================= */
+
+let currentUser = null;
+
+
+/* =========================
+   GOOGLE LOGIN
+========================= */
+
+window.googleLogin = async function(){
+
+  try{
+
+    const result =
+      await signInWithPopup(auth, provider);
+
+    currentUser = result.user;
+
+    alert(
+      "Google account connected successfully!"
+    );
+
+    updateUserUI();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Google login failed: " +
+      error.message
+    );
+
+  }
+
+};
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+window.logout = async function(){
+
+  await signOut(auth);
+
+  currentUser = null;
+
+  updateUserUI();
+
+};
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+onAuthStateChanged(auth,(user)=>{
+
+  currentUser = user;
+
+  updateUserUI();
+
+});
+
+
+/* =========================
+   USER UI
+========================= */
+
+function updateUserUI(){
+
+  const info =
+    document.getElementById("userInfo");
+
+  const admin =
+    document.getElementById("adminPanel");
+
+  if(!currentUser){
+
+    info.innerHTML =
+      "Not connected.";
+
+    admin.classList.add("hidden");
+
+    return;
+
+  }
+
+
+  info.innerHTML =
+    "Connected as: <b>" +
+    currentUser.email +
+    "</b>";
+
+
+  if(
+    currentUser.email.toLowerCase()
+    === ADMIN_EMAIL.toLowerCase()
+  ){
+
+    admin.classList.remove("hidden");
+
+    loadSettings();
+
+    loadAdminPosts();
+
+  }else{
+
+    admin.classList.add("hidden");
+
+  }
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+window.showHome = function(){
+
+  document.getElementById("home")
+    .classList.remove("hidden");
+
+  document.getElementById("creator")
+    .classList.add("hidden");
+
+  loadPosts();
+
+};
+
+
+window.showCreator = function(){
+
+  document.getElementById("home")
+    .classList.add("hidden");
+
+  document.getElementById("creator")
+    .classList.remove("hidden");
+
+  updateUserUI();
+
+};
+
+
+/* =========================
+   LOAD WEBSITE SETTINGS
+========================= */
+
+async function loadSettings(){
+
+  try{
+
+    const snap =
+      await getDoc(
+        doc(db,"settings","website")
+      );
+
+    if(!snap.exists()) return;
+
+    const data = snap.data();
+
+    document.getElementById("siteName").value =
+      data.siteName || "Kitsune AniVerse";
+
+    document.getElementById("facebook").value =
+      data.facebook || "";
+
+    document.getElementById("instagram").value =
+      data.instagram || "";
+
+    document.getElementById("youtube").value =
+      data.youtube || "";
+
+    updateSocialLinks(data);
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   SAVE SETTINGS
+========================= */
+
+window.saveSettings = async function(){
+
+  if(!isAdmin()){
+
+    alert("Admin only.");
+
+    return;
+
+  }
+
+
+  const siteName =
+    document.getElementById("siteName").value;
+
+  const facebook =
+    document.getElementById("facebook").value;
+
+  const instagram =
+    document.getElementById("instagram").value;
+
+  const youtube =
+    document.getElementById("youtube").value;
+
+
+  await setDoc(
+
+    doc(db,"settings","website"),
+
+    {
+      siteName,
+      facebook,
+      instagram,
+      youtube,
+      updatedAt:Date.now()
+    },
+
+    {merge:true}
+
+  );
+
+
+  document.getElementById(
+    "settingsStatus"
+  ).innerHTML =
+    '<span class="success">Settings saved successfully.</span>';
+
+
+  updateSocialLinks({
+    facebook,
+    instagram,
+    youtube
+  });
+
+};
+
+
+/* =========================
+   SOCIAL LINKS
+========================= */
+
+function updateSocialLinks(data){
+
+  const box =
+    document.getElementById("socialLinks");
+
+  let html = "";
+
+  if(data.facebook){
+
+    html +=
+      `<a href="${escapeAttr(data.facebook)}"
+      target="_blank">Facebook</a>`;
+
+  }
+
+  if(data.instagram){
+
+    html +=
+      `<a href="${escapeAttr(data.instagram)}"
+      target="_blank">Instagram</a>`;
+
+  }
+
+  if(data.youtube){
+
+    html +=
+      `<a href="${escapeAttr(data.youtube)}"
+      target="_blank">YouTube</a>`;
+
+  }
+
+  box.innerHTML = html;
+
+}
+
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+function isAdmin(){
+
+  return currentUser &&
+    currentUser.email.toLowerCase()
+    === ADMIN_EMAIL.toLowerCase();
+
+}
+
+
+/* =========================
+   UPLOAD POST
+========================= */
+
+window.uploadPost = async function(){
+
+  if(!isAdmin()){
+
+    alert("Only the admin can publish posts.");
+
+    return;
+
+  }
+
+
+  const title =
+    document.getElementById("postTitle").value.trim();
+
+  const description =
+    document.getElementById("postDescription").value.trim();
+
+  const file =
+    document.getElementById("postFile").files[0];
+
+
+  if(!title){
+
+    alert("Enter a post title.");
+
+    return;
+
+  }
+
+
+  if(!file){
+
+    alert("Choose an image or video.");
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById("uploadStatus");
+
+
+  status.innerText =
+    "Uploading... 0%";
+
+
+  try{
+
+    /*
+      Firebase Storage supports large files.
+      This uses resumable upload.
+    */
+
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+
+    const storageRef =
+      ref(
+        storage,
+        "posts/" +
+        Date.now() +
+        "_" +
+        safeName
+      );
+
+
+    const uploadTask =
+      uploadBytesResumable(
+        storageRef,
+        file
+      );
+
+
+    uploadTask.on(
+
+      "state_changed",
+
+      (snapshot)=>{
+
+        const progress =
+          Math.round(
+            (
+              snapshot.bytesTransferred /
+              snapshot.totalBytes
+            ) * 100
+          );
+
+        status.innerText =
+          "Uploading... " +
+          progress +
+          "%";
+
+      },
+
+      (error)=>{
+
+        console.error(error);
+
+        status.innerText =
+          "Upload failed: " +
+          error.message;
+
+      },
+
+      async ()=>{
+
+        const url =
+          await getDownloadURL(
+            uploadTask.snapshot.ref
+          );
+
+
+        const type =
+          file.type.startsWith("video")
+          ? "video"
+          : "image";
+
+
+        await addDoc(
+
+          collection(db,"posts"),
+
+          {
+            title,
+            description,
+            url,
+            type,
+            fileName:file.name,
+            createdAt:Date.now(),
+            createdBy:currentUser.email
+          }
+
+        );
+
+
+        status.innerHTML =
+          '<span class="success">Post published successfully!</span>';
+
+
+        document.getElementById(
+          "postTitle"
+        ).value = "";
+
+
+        document.getElementById(
+          "postDescription"
+        ).value = "";
+
+
+        document.getElementById(
+          "postFile"
+        ).value = "";
+
+
+        loadPosts();
+
+        loadAdminPosts();
+
+      }
+
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    status.innerText =
+      "Upload failed: " +
+      error.message;
+
+  }
+
+};
+
+
+/* =========================
+   LOAD POSTS
+========================= */
+
+async function loadPosts(){
+
+  const box =
+    document.getElementById("posts");
+
+
+  try{
+
+    const q =
+      query(
+        collection(db,"posts"),
+        orderBy("createdAt","desc")
+      );
+
+
+    const snapshot =
+      await getDocs(q);
+
+
+    if(snapshot.empty){
+
+      box.innerHTML =
+        '<div class="card"><h2>No posts yet</h2><p class="small">New manga, art and videos will appear here.</p></div>';
+
+      return;
+
+    }
+
+
+    let html = "";
+
+
+    snapshot.forEach((item)=>{
+
+      const p = item.data();
+
+
+      html += `
+
+        <article class="post">
+
+          <h2>${escapeHtml(p.title)}</h2>
+
+          <p>${escapeHtml(
+            p.description || ""
+          )}</p>
+
+          ${
+            p.type === "video"
+
+            ?
+
+            `<video
+              controls
+              preload="metadata"
+              src="${escapeAttr(p.url)}">
+            </video>`
+
+            :
+
+            `<img
+              loading="lazy"
+              src="${escapeAttr(p.url)}"
+              alt="${escapeAttr(p.title)}">`
+          }
+
+          <div class="small">
+            Published by ${escapeHtml(
+              p.createdBy || "Kitsune AniVerse"
+            )}
+          </div>
+
+        </article>
+
+      `;
+
+    });
+
+
+    box.innerHTML = html;
+
+
+  }catch(error){
+
+    console.error(error);
+
+    box.innerHTML =
+      `<div class="card">
+        <p>Could not load posts.</p>
+      </div>`;
+
+  }
+
+}
+
+
+/* =========================
+   ADMIN POST LIST
+========================= */
+
+async function loadAdminPosts(){
+
+  if(!isAdmin()) return;
+
+
+  const box =
+    document.getElementById("adminPosts");
+
+
+  const snapshot =
+    await getDocs(
+      query(
+        collection(db,"posts"),
+        orderBy("createdAt","desc")
+      )
+    );
+
+
+  if(snapshot.empty){
+
+    box.innerHTML =
+      "<p class='small'>No posts.</p>";
+
+    return;
+
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item)=>{
+
+    const p = item.data();
+
+
+    html += `
+
+      <div class="post">
+
+        <b>${escapeHtml(p.title)}</b>
+
+        <div class="small">
+          ${escapeHtml(p.fileName || "")}
+        </div>
+
+        <br>
+
+        <button
+          class="danger"
+          onclick="deletePost('${item.id}','${escapeAttr(p.url)}')">
+
+          Delete
+
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+  box.innerHTML = html;
+
+}
+
+
+/* =========================
+   DELETE POST
+========================= */
+
+window.deletePost = async function(
+  id,
+  url
+){
+
+  if(!isAdmin()){
+
+    alert("Admin only.");
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Delete this post permanently?"
+    )
+  ) return;
+
+
+  try{
+
+    await deleteDoc(
+      doc(db,"posts",id)
+    );
+
+
+    try{
+
+      const fileRef =
+        ref(storage,url);
+
+      await deleteObject(fileRef);
+
+    }catch(e){
+
+      console.log(
+        "Storage file could not be deleted:",
+        e
+      );
+
+    }
+
+
+    loadPosts();
+
+    loadAdminPosts();
+
+
+  }catch(error){
+
+    alert(
+      "Delete failed: " +
+      error.message
+    );
+
+  }
+
+};
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(
+      /[&<>"']/g,
+      function(m){
+
+        return {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+
+        }[m];
+
+      }
+    );
+
+}
+
+
+function escapeAttr(value){
+
+  return String(value || "")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadPosts();
+
 </script>
+
 </body>
 </html>
